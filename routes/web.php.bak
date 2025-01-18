@@ -1,0 +1,33 @@
+<?php
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
+  
+Route::get('/', function () {
+    return view('dashboard');
+});
+  
+Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post'); 
+Route::get('registration', [AuthController::class, 'registration'])->name('register');
+Route::post('post-registration', [AuthController::class, 'postRegistration'])->name('register.post'); 
+Route::get('dashboard', [AuthController::class, 'dashboard'])->name('dashboard'); 
+Route::get('logout', [AuthController::class, 'logout'])->name('logout'); 
+
+Route::post('hash-password', [AuthController::class, 'hashPassword']);
+
+Route::get('users', [AuthController::class, 'users'])->name('users'); 
+Route::get('leads', [AuthController::class, 'leads'])->name('leads'); 
+Route::get('sale-status', [AuthController::class, 'sale-status'])->name('sale-status'); 
+Route::get('follow-up', [AuthController::class, 'follow-up'])->name('follow-up'); 
+Route::get('upgrade', [AuthController::class, 'upgrade'])->name('upgrade'); 
+Route::get('docusign', [AuthController::class, 'docusign'])->name('docusign'); 
+Route::get('invoice', [AuthController::class, 'invoice'])->name('invoice'); 
+Route::get('feedbacks', [AuthController::class, 'feedbacks'])->name('feedbacks'); 
+Route::get('reports', [AuthController::class, 'reports'])->name('reports'); 
+Route::get('subscription', [AuthController::class, 'subscription'])->name('subscription'); 
+
+
+
+
+
+
