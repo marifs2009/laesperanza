@@ -1,6 +1,5 @@
 @extends('admin.app')
 @section('title', $page_title)
-
 @section('page_css')
   <style>
     .btn .icon { margin: 0; }
