@@ -9,6 +9,10 @@ use App\Http\Controllers\Admin\CurrenciesController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\OffersController;
 use App\Http\Controllers\Admin\GeneralSettingsController;
+use App\Http\Controllers\Admin\PagesController;
+use App\Http\Controllers\Admin\TestimonialssController;
+//use App\Http\Controllers\HomeController;
+use App\Models\Pages;
 
 Route::prefix('admin')->group(function () {
     Route::get('login', [\App\Http\Controllers\Auth\AuthController::class, 'index'])->name('admin.login');
@@ -38,6 +42,7 @@ Route::prefix('admin')->group(function () {
     //Menus
     Route::get('/menus/{encry_menu_type_id}', [\App\Http\Controllers\Admin\MenusController::class, 'menus_list'])->name('menus.list');
     Route::post('/menus-store', [\App\Http\Controllers\Admin\MenusController::class, 'store'])->name('menus.store');
+    Route::get('/menu-edit', [\App\Http\Controllers\Admin\MenusController::class, 'edit'])->name('menu.edit');
     
     //Sliders
     Route::get('/sliders/{encry_slider_type_id}', [\App\Http\Controllers\Admin\SlidersController::class, 'list'])->name('sliders.list');
@@ -58,11 +63,19 @@ Route::prefix('admin')->group(function () {
     Route::post('/testimonial-delete', [\App\Http\Controllers\Admin\TestimonialsController::class, 'delete'])->name('testimonial.delete');
     Route::post('/testimonial-edit', [\App\Http\Controllers\Admin\TestimonialsController::class, 'edit'])->name('testimonial.edit');
 
-
+    //pages
+    Route::get('/page-list', [\App\Http\Controllers\Admin\PagesController::class, 'list'])->name('page.list');
+    Route::get('/page-add', [\App\Http\Controllers\Admin\PagesController::class, 'add'])->name('page.add');
+    Route::post('/page-store', [\App\Http\Controllers\Admin\PagesController::class, 'store'])->name('page.store');
+    Route::get('/page-edit/{page_id}', [\App\Http\Controllers\Admin\PagesController::class, 'edit'])->name('page.edit');
+    Route::post('/page-update', [\App\Http\Controllers\Admin\PagesController::class, 'update'])->name('page.update');
+    Route::post('/page-delete', [\App\Http\Controllers\Admin\PagesController::class, 'delete'])->name('page.delete');
 
 });
 
 
+
+    Route::get('/', [\App\Http\Controllers\Page::class, 'index'])->name('/');
 
     Route::get('users-list', [Admin\UsersController::class, 'list'])->name('users.list'); 
     Route::get('leads', [Admin\LeadsController::class, 'leads'])->name('leads'); 
@@ -76,20 +89,27 @@ Route::prefix('admin')->group(function () {
     Route::get('subscription', [Admin\Sales::class, 'subscription'])->name('subscription'); 
 
 
+    $pageSlugs = Pages::getAllSlugs(); // Fetch all slugs from PagesModel
+    foreach ($pageSlugs as $page) { 
+        /*[page_id] => 24
+        [page_slug] => contact-us
+        [page_title] => Contact Us
+        [page_category] => 1
+        [category_name] => Page */
+
+        //echo "<pre>"; print_r($page); echo "</pre>"; 
+        if(!empty($page->category_name) && $page->page_category != 1){
+            $url = strtolower($page->category_name)."/".$page->page_slug; 
+        } else {
+            $url = $page->page_slug; 
+        }
+        //echo "<br>".$url;//die;
+        Route::get($url, [\App\Http\Controllers\Page::class, 'show'])->name($page->page_slug);
+    }
 
 
-
-
-
-
-
-
-
-
-
-// Route::middleware([Admin\'auth'])->group(function () {
-    
-// });
-
+Route::fallback(function () {
+    return response()->view('404', [], 404);
+});
 
 

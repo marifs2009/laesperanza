@@ -64,6 +64,11 @@ class GeneralSettingsModel extends Model
     } 
 
 
+    public static function getBusinessAddress()
+    {
+        $r = GeneralSettingsModel::where(['status' => 1, 'name' => 'business_address'])->first();
+        return $r->value;
+    } 
 
 
 }

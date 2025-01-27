@@ -45,9 +45,9 @@
                 <table id="datatable-buttons" class="table table-bordered dt-responsive">
                     <thead>
                       <tr>
-                        <th style="width:10%;">Menu Order</th>
-                        <th style="width:20%;">Menu Label</th>
-                        <th style="width:30%;">Menu Link</th>
+                        <th style="width:10%;">Order</th>
+                        <th style="width:20%;">Label</th>
+                        <th style="width:30%;">Link to Page</th>
                         <th style="width:20%;">Parent Menu</th>
                         <th style="width:10%;">Status</th>
                         <th style="width:10%;">Action</th>
@@ -59,10 +59,35 @@
                         <tr>
                           <td>{{$sel_menu->menu_order}}</td>
                           <td>{{$sel_menu->menu_label}}</td>
-                          <td>{{$sel_menu->menu_link}}</td>
-                          <td>{{$sel_menu->menu_parent_id}}</td>
-                          <td>{{$sel_menu->status}}</td>
-                          <td>{{$sel_menu->menu_id}} | {{$sel_menu->menu_type_id}}</td>
+                          <td>
+                            @if (empty($sel_menu->menu_link) )
+                              #
+                            @elseif (is_numeric($sel_menu->menu_link) && $sel_menu->menu_link > 0)
+                              {{$sel_menu->page_title}}
+                            @else
+                              {{$sel_menu->menu_link}}
+                            @endif
+                          <td>{{ $sel_menu->menu_parent_id }} 
+                            @if($sel_menu->menu_parent_id == 0) 
+                              No Parent 
+                            @else 
+                              {{ $sel_menu->menu_parent_id }} 
+                            @endif</td>
+                          <td class="text-center">
+                            @if($sel_menu->status == 1)
+                              <span class="badge bg-lime-lt">Active</span>
+                            @else 
+                              <span class="badge bg-red-lt">Inactive</span>
+                            @endif
+                          </td>
+                          <td> {{$sel_menu->menu_type_id}}
+                            <a type="button" class="btn" href="{{ route('menu.edit', ['menu_id' => $sel_menu->menu_id]) }}">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path><path d="M16 5l3 3"></path></svg>
+                            </a>
+                            <button type="button" class="btn" onclick="menu_delete({{$sel_menu->menu_id}});">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
+                            </button>
+                          </td>
                         </tr>
                         @endforeach
                       @endif
@@ -94,14 +119,37 @@
                         <span id="err_menu_label"></span>
                     </div>
                     <div class="col-md-12 mb-3">
-                        <p>Menu Link  <span class="required">*</span></p>
-                        <input type="text" name="menu_link" id="menu_link" class="form-control" placeholder="Enter link">
+                        <p>Link to Page  <span class="required">*</span></p>
+                        <select name="page_id" class="form-control">
+                          <option value="">Select</option>
+                          @if(!empty($pages))
+                            @foreach($pages as $p)
+                              <option value="{{ $p->page_id}}">{{ $p->page_title}}</option>
+                            @endforeach
+                          @endif
+                        </select>
+                        <small>If selected a page then custom link will be ignore during save the menu</small>
                     </div>
                     <div style="text-align: center;">or</div>
+                    <p>Link to Custom URL <span class="required">*</span></p>
+                    <div class="col-md-12 mb-3">
+                        <input type="text" name="custom_link" id="custom_link" class="form-control" placeholder="Enter custom link">
+                    </div>
 
                     <div class="col-md-12 mb-3">
-                        <input type="text" name="menu_custom_link" id="menu_custom_link" class="form-control" placeholder="Enter custom link">
+                        <p>Parent Menu (Option)</p>
+                        <select name="parent_menu_id" class="form-control">
+                          <option value="0">No Parent</option>
+                          @if(!empty($parent_menus))
+                            @foreach($parent_menus as $pmanu)
+                              <option value="{{ $pmanu->menu_id}}">{{ $pmanu->menu_label}}</option>
+                            @endforeach
+                          @endif
+                        </select>
+                        <small>If not selected then present menu will become parent</small>
                     </div>
+
+
                     <div class="col-md-12 mb-3">
                         <p>Menu Order <span class="required">*</span></p>
                         <input type="number" name="menu_order" id="menu_order" class="form-control" placeholder="Enter order of menu">
