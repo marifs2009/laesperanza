@@ -17,7 +17,7 @@ use App\Models\Admin\ActivityModel;
 use App\Models\Admin\OffersModel;
 use App\Models\Admin\GeneralSettingsModel;
 use Illuminate\Support\Facades\Crypt;
-
+ 
 class SlidersController extends Controller
 {
     /**

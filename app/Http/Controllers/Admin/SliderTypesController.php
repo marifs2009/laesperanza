@@ -51,7 +51,7 @@ class SliderTypesController extends Controller
       if($r){
         $response['msg']="Slider type saved successfully.";
         $response['status'] = 1;
-      } else {
+      } else { 
           $response['msg']="Unable to save slider type";
           $response['status'] = 0;                
       }

@@ -21,6 +21,6 @@ class SliderTypesModel extends Model
         return SliderTypesModel::select('slider_type_name')->where(['status' => 1, 'slider_type_id' => $slider_type_id])->first();
     } 
 
-
+ 
 }
 

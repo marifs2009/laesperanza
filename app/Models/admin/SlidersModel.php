@@ -20,7 +20,7 @@ class SlidersModel extends Model
         ->where(['sliders.slider_type_id' => $slider_type_id])->get();
     } 
 
-
+ 
 
 }
 

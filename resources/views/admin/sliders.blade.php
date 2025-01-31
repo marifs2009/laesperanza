@@ -106,25 +106,25 @@
                         @csrf
                         <div class="col-md-12 mb-3"> 
                           <p>Slide Title <span class="required">*</span></p>
-                          <input type="text" name="slider_title" id="slider_title" class="form-control" placeholder="Enter slider Label" value="{{$sel_slider->slider_title}}">
-                          <span id="err_slider_title"></span>
+                          <input type="text" name="slider_title" id="slider_title_{{$sel_slider->slider_id}}" class="form-control" placeholder="Enter slider Label" value="{{$sel_slider->slider_title}}">
+                          <span id="err_slider_title_{{$sel_slider->slider_id}}"></span>
                         </div>
                         <div class="col-md-12 mb-3">
                           <p>Enter Sub-title (Optional)</p>
-                          <input type="text" name="slider_subtitle" id="slider_subtitle" class="form-control" placeholder="Enter Sub-title" value="{{$sel_slider->slider_subtitle}}">
+                          <input type="text" name="slider_subtitle" id="slider_subtitle_{{$sel_slider->slider_id }}" class="form-control" placeholder="Enter Sub-title" value="{{$sel_slider->slider_subtitle}}">
                         </div>
                         <div class="col-md-12 mb-3">
                           <p>Button Caption (Optional)</p>
-                          <input type="text" name="slider_button_caption" id="slider_button_caption" class="form-control" placeholder="Enter button caption" value="{{$sel_slider->slider_button_caption}}">
+                          <input type="text" name="slider_button_caption" id="slider_button_caption_{{$sel_slider->slider_id }}" class="form-control" placeholder="Enter button caption" value="{{$sel_slider->slider_button_caption}}">
                         </div>
                         <div class="col-md-12 mb-3">
                           <p>Button Link (Optional)</p>
-                          <input type="text" name="slider_button_link" id="slider_button_link" class="form-control" placeholder="Enter button link" value="{{$sel_slider->slider_button_link}}">
+                          <input type="text" name="slider_button_link" id="slider_button_link_{{$sel_slider->slider_id }}" class="form-control" placeholder="Enter button link" value="{{$sel_slider->slider_button_link}}">
                         </div>
                         <div class="col-md-12 mb-3">
                           <p>Slide Order <span class="required">*</span></p>
-                          <input type="number" name="slider_order" id="slider_order" class="form-control" placeholder="Enter order of slider" value="{{$sel_slider->slider_order}}">
-                          <span id="err_slider_order"></span>
+                          <input type="number" name="slider_order" id="slider_order_{{$sel_slider->slider_id }}" class="form-control" placeholder="Enter order of slider" value="{{$sel_slider->slider_order}}">
+                          <span id="err_slider_order_{{$sel_slider->slider_id }}"></span>
                         </div>
                         <div class="col-md-12 mb-3">
                           <div class="row">
@@ -135,15 +135,15 @@
                             </div>
                             <div class="col-md-9">
                               <p>New Picture <span class="required">*</span></p>
-                              <input type="file" name="slider_picture" id="slider_picture" class="form-control" placeholder="Select Picture">
+                              <input type="file" name="slider_picture" id="slider_picture_{{$sel_slider->slider_id }}" class="form-control" placeholder="Select Picture">
                               <small>Left blank if don't want to change</small>
-                              <span id="err_slider_picture"></span>
+                              <span id="err_slider_picture_{{$sel_slider->slider_id }}"></span>
                             </div>
                           </div>
                         </div>
                         <div class="col-md-12 mb-3">
                           <p>Picture Alt (Optional)</p>
-                          <textarea name="slider_picture_alt" id="slider_picture_alt" class="form-control" placeholder="Enter Alt Text">{{$sel_slider->slider_picture_alt}}</textarea>
+                          <textarea name="slider_picture_alt" id="slider_picture_alt_{{$sel_slider->slider_id }}" class="form-control" placeholder="Enter Alt Text">{{$sel_slider->slider_picture_alt}}</textarea>
                         </div>
                         <div class="col-md-12 mb-3">
                           <p>Status <span class="required">*</span></p>                                
@@ -237,7 +237,7 @@
         </div>
         <div class="col-md-12">
           <input type="hidden" name="slider_type_id" value="{{ $slider_type_id }}">
-          <input class="btn btn-primary" type="submit" class="btn btn-lg btn-block" value="Save"/>
+          <input class="btn btn-primary" type="submit" value="Save"/>
         </div>
       </form>  
       </div>

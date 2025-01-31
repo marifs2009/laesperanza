@@ -11,33 +11,34 @@ use App\Http\Controllers\Admin\OffersController;
 use App\Http\Controllers\Admin\GeneralSettingsController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\TestimonialssController;
-//use App\Http\Controllers\HomeController;
 use App\Models\Pages;
 
+
+
 Route::prefix('admin')->group(function () {
-    Route::get('login', [\App\Http\Controllers\Auth\AuthController::class, 'index'])->name('admin.login');
-    Route::post('post-login', [\App\Http\Controllers\Auth\AuthController::class, 'postLogin'])->name('login.post');
-    Route::get('registration', [\App\Http\Controllers\Auth\AuthController::class, 'registration'])->name('register');
-    Route::post('post-registration', [\App\Http\Controllers\Auth\AuthController::class, 'postRegistration'])->name('register.post'); 
-    Route::get('dashboard', [\App\Http\Controllers\Auth\AuthController::class, 'dashboard'])->name('dashboard'); 
-    Route::get('logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout'])->name('logout'); 
-    Route::post('hash-password', [\App\Http\Controllers\Auth\AuthController::class, 'hashPassword']);
-    Route::get('settings', [\App\Http\Controllers\Admin\AppSettings::class, 'index'])->name('admin.settings'); 
+    Route::get('/login', [\App\Http\Controllers\Auth\AuthController::class, 'index'])->name('admin.login');
+    Route::post('/post-login', [\App\Http\Controllers\Auth\AuthController::class, 'postLogin'])->name('login.post');
+    Route::get('/registration', [\App\Http\Controllers\Auth\AuthController::class, 'registration'])->name('register');
+    Route::post('/post-registration', [\App\Http\Controllers\Auth\AuthController::class, 'postRegistration'])->name('register.post'); 
+    Route::get('/dashboard', [\App\Http\Controllers\Auth\AuthController::class, 'dashboard'])->name('dashboard'); 
+    Route::get('/logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout'])->name('logout'); 
+    Route::post('/hash-password', [\App\Http\Controllers\Auth\AuthController::class, 'hashPassword']);
+    Route::get('/settings', [\App\Http\Controllers\Admin\AppSettings::class, 'index'])->name('admin.settings'); 
         //settings
-    Route::post('role-store', [\App\Http\Controllers\Admin\RolesController::class, 'store'])->name('admin.role.store');
-    Route::post('meals-store', [\App\Http\Controllers\Admin\MealsController::class, 'store'])->name('admin.meals.store');
-    Route::post('menu-type-store', [\App\Http\Controllers\Admin\MenuTypesController::class, 'store'])->name('admin.menutype.store');
+    Route::post('/role-store', [\App\Http\Controllers\Admin\RolesController::class, 'store'])->name('admin.role.store');
+    Route::post('/meals-store', [\App\Http\Controllers\Admin\MealsController::class, 'store'])->name('admin.meals.store');
+    Route::post('/menu-type-store', [\App\Http\Controllers\Admin\MenuTypesController::class, 'store'])->name('admin.menutype.store');
 
-    Route::post('slider-type-store', [\App\Http\Controllers\Admin\SliderTypesController::class, 'store'])->name('admin.slidertype.store');
-    Route::post('tour-type-store', [\App\Http\Controllers\Admin\TourTypesController::class, 'store'])->name('admin.tourtype.store');
-    Route::post('tabs-store', [\App\Http\Controllers\Admin\TagsController::class, 'store'])->name('admin.tags.store');
+    Route::post('/slider-type-store', [\App\Http\Controllers\Admin\SliderTypesController::class, 'store'])->name('admin.slidertype.store');
+    Route::post('/tour-type-store', [\App\Http\Controllers\Admin\TourTypesController::class, 'store'])->name('admin.tourtype.store');
+    Route::post('/tabs-store', [\App\Http\Controllers\Admin\TagsController::class, 'store'])->name('admin.tags.store');
 
-    Route::post('currencies-store', [\App\Http\Controllers\Admin\CurrenciesController::class, 'store'])->name('admin.currencies.store');
-    Route::post('activity-store', [\App\Http\Controllers\Admin\ActivityController::class, 'store'])->name('admin.activity.store');
-    Route::post('offer-store', [\App\Http\Controllers\Admin\OffersController::class, 'store'])->name('admin.offer.store');
+    Route::post('/currencies-store', [\App\Http\Controllers\Admin\CurrenciesController::class, 'store'])->name('admin.currencies.store');
+    Route::post('/activity-store', [\App\Http\Controllers\Admin\ActivityController::class, 'store'])->name('admin.activity.store');
+    Route::post('/offer-store', [\App\Http\Controllers\Admin\OffersController::class, 'store'])->name('admin.offer.store');
 
-    Route::post('update-logo', [\App\Http\Controllers\Admin\GeneralSettingsController::class, 'updateLogo'])->name('admin.logo.update');
-    Route::post('update-general-setting', [\App\Http\Controllers\Admin\GeneralSettingsController::class, 'updateOtherDetails'])->name('admin.generalsetting.update');
+    Route::post('/update-logo', [\App\Http\Controllers\Admin\GeneralSettingsController::class, 'updateLogo'])->name('admin.logo.update');
+    Route::post('/update-general-setting', [\App\Http\Controllers\Admin\GeneralSettingsController::class, 'updateOtherDetails'])->name('admin.generalsetting.update');
 
     //Menus
     Route::get('/menus/{encry_menu_type_id}', [\App\Http\Controllers\Admin\MenusController::class, 'menus_list'])->name('menus.list');
@@ -71,22 +72,32 @@ Route::prefix('admin')->group(function () {
     Route::post('/page-update', [\App\Http\Controllers\Admin\PagesController::class, 'update'])->name('page.update');
     Route::post('/page-delete', [\App\Http\Controllers\Admin\PagesController::class, 'delete'])->name('page.delete');
 
+    //tours
+    Route::get('/tour-list', [\App\Http\Controllers\Admin\TourController::class, 'list'])->name('tour.list');
+    Route::get('/tour-add', [\App\Http\Controllers\Admin\TourController::class, 'add'])->name('tour.add');
+    Route::post('/tour-store', [\App\Http\Controllers\Admin\TourController::class, 'store'])->name('tour.store');
+    Route::get('/tour-edit/{tour_id}', [\App\Http\Controllers\Admin\TourController::class, 'edit'])->name('tour.edit');
+    Route::post('/tour-update', [\App\Http\Controllers\Admin\TourController::class, 'update'])->name('tour.update');
+    Route::post('/tour-delete', [\App\Http\Controllers\Admin\TourController::class, 'delete'])->name('tour.delete');
+
+    //Tour Category
+    Route::get('/tourcategory-list', [\App\Http\Controllers\Admin\TourCategoryController::class, 'list'])->name('tourcategory.list');
+    Route::get('/tourcategory-add', [\App\Http\Controllers\Admin\TourCategoryController::class, 'add'])->name('tourcategory.add');
+    Route::post('/tourcategory-store', [\App\Http\Controllers\Admin\TourCategoryController::class, 'store'])->name('tourcategory.store');
+    Route::get('/tourcategory-edit/{tourcategory_id}', [\App\Http\Controllers\Admin\TourCategoryController::class, 'edit'])->name('tourcategory.edit');
+    Route::post('/tourcategory-update', [\App\Http\Controllers\Admin\TourCategoryController::class, 'update'])->name('tourcategory.update');
+    Route::post('/tourcategory-delete', [\App\Http\Controllers\Admin\TourCategoryController::class, 'delete'])->name('tourcategory.delete');
+
+
+
 });
 
 
 
     Route::get('/', [\App\Http\Controllers\Page::class, 'index'])->name('/');
 
-    Route::get('users-list', [Admin\UsersController::class, 'list'])->name('users.list'); 
-    Route::get('leads', [Admin\LeadsController::class, 'leads'])->name('leads'); 
-    Route::get('sale-status', [Admin\Sales::class, 'sale-status'])->name('sale-status'); 
-    Route::get('follow-up', [Admin\Sales::class, 'follow-up'])->name('follow-up'); 
-    Route::get('upgrade', [Admin\Sales::class, 'upgrade'])->name('upgrade'); 
-    Route::get('docusign', [Admin\Sales::class, 'docusign'])->name('docusign'); 
-    Route::get('invoice', [Admin\Sales::class, 'invoice'])->name('invoice'); 
-    Route::get('feedbacks', [Admin\Sales::class, 'feedbacks'])->name('feedbacks'); 
-    Route::get('reports', [Admin\Sales::class, 'reports'])->name('reports'); 
-    Route::get('subscription', [Admin\Sales::class, 'subscription'])->name('subscription'); 
+    Route::get('/users-list', [Admin\UsersController::class, 'list'])->name('users.list'); 
+
 
 
     $pageSlugs = Pages::getAllSlugs(); // Fetch all slugs from PagesModel
@@ -104,7 +115,7 @@ Route::prefix('admin')->group(function () {
             $url = $page->page_slug; 
         }
         //echo "<br>".$url;//die;
-        Route::get($url, [\App\Http\Controllers\Page::class, 'show'])->name($page->page_slug);
+        Route::get('/'.$url, [\App\Http\Controllers\Page::class, 'show'])->name($page->page_slug);
     }
 
 

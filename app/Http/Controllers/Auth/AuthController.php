@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\Admin\GeneralSettingsModel;
 use App\Models\Admin\MenuTypesModel;
 use App\Models\Admin\SliderTypesModel;
+use App\Models\Admin\RolesModel;
 
 class AuthController extends Controller
 {
@@ -54,7 +55,11 @@ class AuthController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-   
+        $AllRoles = [];
+        $roles = RolesModel::getAll();
+        foreach ($roles as $role) {
+            $AllRoles[$role['id']] =$role['name'];
+        }
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $user_data = User::where('email', $request->email)->first();
@@ -64,7 +69,7 @@ class AuthController extends Controller
                 "user_name" => $user_data->name, 
                 "user_email" => $user_data->email, 
                 "user_pic" => $user_data->pic, 
-                "user_role" => USER_ROLES[$user_data->role], 
+                "user_role" => $AllRoles[$user_data->role], 
                 "user_password" => $user_data->password, 
                 "user_status" => $user_data->status
             ]);
