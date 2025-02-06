@@ -5,14 +5,27 @@ use App\Http\Controllers\Admin\AppSettings;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\MealsController;
 use App\Http\Controllers\Admin\MenuTypesController;
-use App\Http\Controllers\Admin\CurrenciesController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\OffersController;
 use App\Http\Controllers\Admin\GeneralSettingsController;
 use App\Http\Controllers\Admin\PagesController;
+
 use App\Http\Controllers\Admin\TestimonialssController;
 use App\Models\Pages;
 
+
+    Route::get('/', [\App\Http\Controllers\Page::class, 'index'])->name('home');
+
+    $pageSlugs = Pages::getAllSlugs(); // Fetch all slugs from PagesModel
+    foreach ($pageSlugs as $page) { 
+        if(!empty($page->category_name) && $page->page_category != 1){
+            $url = strtolower($page->category_name)."/".$page->page_slug; 
+        } else {
+            $url = $page->page_slug; 
+        }
+        //echo "<br>".$url;
+        Route::get($url, [\App\Http\Controllers\Page::class, 'show'])->name($page->page_slug);
+    }
 
 
 Route::prefix('admin')->group(function () {
@@ -33,7 +46,6 @@ Route::prefix('admin')->group(function () {
     Route::post('/tour-type-store', [\App\Http\Controllers\Admin\TourTypesController::class, 'store'])->name('admin.tourtype.store');
     Route::post('/tabs-store', [\App\Http\Controllers\Admin\TagsController::class, 'store'])->name('admin.tags.store');
 
-    Route::post('/currencies-store', [\App\Http\Controllers\Admin\CurrenciesController::class, 'store'])->name('admin.currencies.store');
     Route::post('/activity-store', [\App\Http\Controllers\Admin\ActivityController::class, 'store'])->name('admin.activity.store');
     Route::post('/offer-store', [\App\Http\Controllers\Admin\OffersController::class, 'store'])->name('admin.offer.store');
 
@@ -76,6 +88,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/tour-list', [\App\Http\Controllers\Admin\TourController::class, 'list'])->name('tour.list');
     Route::get('/tour-add', [\App\Http\Controllers\Admin\TourController::class, 'add'])->name('tour.add');
     Route::post('/tour-store', [\App\Http\Controllers\Admin\TourController::class, 'store'])->name('tour.store');
+    Route::post('/requiredfields-store', [\App\Http\Controllers\Admin\TourController::class, 'requiredfields_store'])->name('requiredfields.store');
     Route::get('/tour-edit/{tour_id}', [\App\Http\Controllers\Admin\TourController::class, 'edit'])->name('tour.edit');
     Route::post('/tour-update', [\App\Http\Controllers\Admin\TourController::class, 'update'])->name('tour.update');
     Route::post('/tour-delete', [\App\Http\Controllers\Admin\TourController::class, 'delete'])->name('tour.delete');
@@ -88,35 +101,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/tourcategory-update', [\App\Http\Controllers\Admin\TourCategoryController::class, 'update'])->name('tourcategory.update');
     Route::post('/tourcategory-delete', [\App\Http\Controllers\Admin\TourCategoryController::class, 'delete'])->name('tourcategory.delete');
 
-
-
 });
-
-
-
-    Route::get('/', [\App\Http\Controllers\Page::class, 'index'])->name('/');
-
-    Route::get('/users-list', [Admin\UsersController::class, 'list'])->name('users.list'); 
-
-
-
-    $pageSlugs = Pages::getAllSlugs(); // Fetch all slugs from PagesModel
-    foreach ($pageSlugs as $page) { 
-        /*[page_id] => 24
-        [page_slug] => contact-us
-        [page_title] => Contact Us
-        [page_category] => 1
-        [category_name] => Page */
-
-        //echo "<pre>"; print_r($page); echo "</pre>"; 
-        if(!empty($page->category_name) && $page->page_category != 1){
-            $url = strtolower($page->category_name)."/".$page->page_slug; 
-        } else {
-            $url = $page->page_slug; 
-        }
-        //echo "<br>".$url;//die;
-        Route::get('/'.$url, [\App\Http\Controllers\Page::class, 'show'])->name($page->page_slug);
-    }
 
 
 Route::fallback(function () {

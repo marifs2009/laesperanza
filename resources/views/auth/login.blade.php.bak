@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>Sign in with illustration </title>
-    <!--<script defer data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script>-->
+    <script defer data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="mobile-web-app-capable" content="yes"/>
@@ -15,11 +15,11 @@
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon"/> 
     <meta name="description" content="Tabler comes with!"/>
     <!-- CSS files -->
-    <link href="{{ asset('css/tabler.min.css?1685973381') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/tabler-flags.min.css?168597338') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/tabler-payments.min.css?1685973381') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/tabler-vendors.min.css?1685973381') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/demo.min.css?1685973381') }}" rel="stylesheet"/>
+    <link href="{{ URL::asset('css/tabler.min.css?1685973381') }}" rel="stylesheet"/>
+    <link href="{{ URL::asset('css/tabler-flags.min.css?168597338') }}" rel="stylesheet"/>
+    <link href="{{ URL::asset('css/tabler-payments.min.css?1685973381') }}" rel="stylesheet"/>
+    <link href="{{ URL::asset('css/tabler-vendors.min.css?1685973381') }}" rel="stylesheet"/>
+    <link href="{{ URL::asset('css/demo.min.css?1685973381') }}" rel="stylesheet"/>
     <style>
       @import url('https://rsms.me/inter/inter.css');
       :root {
@@ -31,14 +31,14 @@
     </style>
   </head>
   <body  class=" d-flex flex-column">
-    <script src="{{ asset('js/demo-theme.min.js?1685973381')}}"></script>
+    <script src="{{ URL::asset('js/demo-theme.min.js?1685973381')}}"></script>
     <div class="page page-center">
       <div class="container container-normal py-4">
         <div class="row align-items-center g-4">
           <div class="col-lg">
             <div class="container-tight">
               <div class="text-center mb-4">
-                <a href="{{ route('admin.login') }}" class="navbar-brand navbar-brand-autodark">
+                <a href="{{ URL::route('admin.login') }}" class="navbar-brand navbar-brand-autodark">
                   <img style="height:50px;" src ="{{ asset('storage/' . $logo) }}" alt="">
                 </a>
               </div>
@@ -99,7 +99,7 @@
               </div>
           </div>
           <div class="col-lg d-none d-lg-block">
-            <img src="{{ asset('static/illustrations/undraw_secure_login_pdn4.svg')}}" height="300" class="d-block mx-auto" alt="">
+            <img src="{{ URL::asset('static/illustrations/undraw_secure_login_pdn4.svg')}}" height="300" class="d-block mx-auto" alt="">
           </div>
         </div>
       </div>

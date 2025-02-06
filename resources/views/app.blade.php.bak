@@ -8,7 +8,6 @@
     <title>@yield('title')</title>
     <!-- Bootstrap css -->
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}" />
-    
     <!-- animate css -->
     <link rel="stylesheet" href="{{asset('assets/css/animate.min.css')}}" />
     <!-- Fontawesome css -->
@@ -435,7 +434,7 @@ $(function(){
     height: 45px;
 }
 </style>
-<a target="_new" href="https://api.whatsapp.com/send?phone=+{{@$whatsApp}}&amp;text=Hi, I am interested in your services" class="whatsapp social-icon">
+<a target="_new" href="https://api.whatsapp.com/send?phone=+{{$whatsApp}}&amp;text=Hi, I am interested in your services" class="whatsapp social-icon">
     <img src="{{asset('assets/img/whatsapp-icon.png')}}">
 </a>
 

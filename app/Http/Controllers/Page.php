@@ -22,12 +22,8 @@ class Page extends Controller
     public function index() // getting home page only
     {
         $data = $services = [];
-        $data['slug'] = 'home'; 
-        //$data['page_id'] = $page_id = Pages::getPageId($slug);
-        //$result = Pages::getPage($slug);
-
-
-        //echo "<pre>";print_r($data['child_primary_menu']);echo "</pre>";die;
+        $data['slug'] = 'home';
+        
         $data['primary_menu'] = MenusModel::getMenuByTypeId(1); //Primary Manu type id is 1
         $data['quick_link_menu'] = MenusModel::getMenuByTypeId(2); //Quick links menu type id is 2
         //echo "<pre>"; print_r($result);echo "</pre>"; die;
@@ -49,9 +45,7 @@ class Page extends Controller
         $data['currency_symbol'] = GeneralSettingsModel::getCurrencySymbol();
         $data['primary_menu'] = $this->create_primary_menu();
 
-
-
-                //echo "<pre>";print_r($data['primary_menu']);echo "</pre>";die;
+        //echo "<pre>";print_r($data['primary_menu']);echo "</pre>";die;
         //getting service pages
         $services = Pages::getPagesByCategoryId(2); // Fetch all slugs from PagesModel
         //echo "<pre>";print_r($pageSlugs);echo "</pre>";
@@ -61,17 +55,20 @@ class Page extends Controller
     }
 
 
+    
+
     public function show(Request $request) // getting all other pages then hompage
     {
         $data = $services = [];
 
         $path = $request->path();
         $segments = explode('/', $path);
+        
         $slug = end($segments);
 
         if(!empty($slug)) { $data['slug'] = $slug; } 
         else { $data['slug'] = 'home'; } 
-        // echo $data['slug'];die;
+        //  echo $data['slug'];die;
         $data['page_id'] = $page_id = Pages::getPageId($slug);
         $result = Pages::getPage($slug);
         $data['primary_menu'] = $this->create_primary_menu();

@@ -21,6 +21,7 @@ use App\Models\Admin\OffersModel;
 use App\Models\Admin\GeneralSettingsModel;
 use App\Models\Admin\TourTypesModel;
 use App\Models\Admin\PageCategoryModel;
+use App\Models\Admin\HotelsModel;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
 
@@ -67,6 +68,37 @@ class TourController extends Controller
       $data['tour_category_title'] = "Add New Tour";
       $data['logo'] = GeneralSettingsModel::getLogo();
       $data['tours'] = TourModel::getAll();
+      $data['tour_types'] = TourTypesModel::getAll();
+      $data['tags'] = TagsModel::getAll();
+      $data['hotels'] = HotelsModel::getAll();
+      $str = "";
+      $first_level = TourCategoryModel::getAllParentTourCategory();
+      if(!empty($first_level)){
+        $str .= "<ul style='list-style-type: none;'>";
+        foreach($first_level as $fl){
+          $str .= '<li><input type="checkbox" name="selected_tour_categories[]"> '.$fl->tour_category_title.'</li>';//die;
+          $second_level = TourCategoryModel::getChildTourCategory($fl->tour_category_id);
+          if(!empty($second_level)){
+            $str .= "<ul style='list-style-type: none;'>";
+            foreach($second_level as $sl){
+              $str .= '<li><input type="checkbox" name="selected_tour_categories[]"> '.$sl->tour_category_title.'</li>';//die;
+              $third_level = TourCategoryModel::getChildTourCategory($sl->tour_category_id);
+              if(!empty($third_level)){
+                $str .= "<ul style='list-style-type: none;'>";
+                foreach($third_level as $tl){
+                  $str .= '<li><input type="checkbox" name="selected_tour_categories[]"> '.$tl->tour_category_title.'</li>';//die;
+                }
+                $str .= "</ul>";
+              }
+            }
+            $str .= "</ul>";
+          }
+        }
+        $str .= "</ul>";
+      }
+      $data['tree'] = $str;
+      $data['categories'] = TourCategoryModel::getAll();
+
       //print_r($data['tour_parent_categories']);
       return view('admin/tour_add', $data);
     }
@@ -81,46 +113,13 @@ class TourController extends Controller
       $str="";
       $data['menu_types'] = MenuTypesModel::getAll();
       $data['slider_types'] = SliderTypesModel::getAll();
-      $data['tour_category_title'] = "Manage Tour Category";
-      
+      $data['page_title'] = "Manage Tours";
       $data['logo'] = GeneralSettingsModel::getLogo();
-      $first_level = TourModel::getAllParentTour();
-
-      //$data['fourth_level'] = TourModel::get4thLavelTour();
-      //$data['fifth_level'] = TourModel::get5thLavelTour();
-
-      if(!empty($first_level)){
-        $str .= "<ul>";
-        foreach($first_level as $fl){
-          $str .= '<li>'.$fl->tour_category_title.'</li>';//die;
-          $second_level = TourModel::getChildTour($fl->tour_category_id);
-          if(!empty($second_level)){
-            $str .= "<ul>";
-            foreach($second_level as $sl){
-              $str .= '<li>'.$sl->tour_category_title.'</li>';//die;
-              $third_level = TourModel::getChildTour($sl->tour_category_id);
-              if(!empty($third_level)){
-                $str .= "<ul>";
-                foreach($third_level as $tl){
-                  $str .= '<li>'.$tl->tour_category_title.'</li>';//die;
-                  
-                }
-                $str .= "</ul>";
-              }
-            }
-            $str .= "</ul>";
-          }
-        }
-        $str .= "</ul>";
-      }
-      $data['tree'] = $str;
-      $data['categories'] = TourModel::getAll();
-
-
-
-
+      $data['categories'] = TourCategoryModel::getAll();
+      $data['tours'] = TourModel::getAll();
+      $data['tour_types'] = TourTypesModel::getAll();
       //echo "<pre>";print_r($data['tour_categories']);echo "</pre>";die;
-      return view('admin/tour_category_list', $data);
+      return view('admin/tour_list', $data);
     }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -188,6 +187,77 @@ class TourController extends Controller
       $r=  TourModel::select('category_level')->where(['status'=>1, 'tour_category_id'=>$tour_parent_category_id])->first();
       return !empty($r->category_level)?$r->category_level:0;
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function requiredfields_store(Request $request)
+    {
+      //echo "<pre>";print_r($_POST);echo "</pre>"; die;
+      try{
+        $request->validate([
+          'tour_title' => 'required',
+          'tour_slug' => 'required',
+          'tour_code' => 'required',
+          'tour_price_per_adult' => 'required',
+          'tour_price_per_child' => 'required',
+          'tour_duration_days' => 'required',          
+          'tour_duration_night' => 'required',
+          'tour_type' => 'required',
+          'tour_start' => 'required',
+          'tour_group_size_adult' => 'required',
+          'tour_group_size_child' => 'required',
+          'status' => 'required',
+          'tour_banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ], [
+          'tour_title' => 'Please enter tour title.',
+          'tour_slug' => 'Please enter tour slug.',
+          'tour_code' => 'Please enter tour code.',
+          'tour_price_per_adult' => 'Please enter price for adult.',
+          'tour_price_per_child' => 'Please enter price for child',
+          'tour_duration_days' => 'Please enter number of days.',
+          'tour_duration_night' => 'Please enter number of nights.',
+          'tour_type' => 'Please enter tour type.',
+          'tour_start' => 'Please enter tour starting location.',
+          'tour_group_size_adult' => 'Please enter max. number of adults in group.',
+          'tour_group_size_child' => 'Please enter max. number of children in group.',
+          'status' => 'Please select tour status.',
+          'tour_banner.required' => 'Please select a banner image.'
+        ]);
+        $tour_banner = '';
+        if ($request->hasFile('tour_banner')) {
+          $file = $request->file('tour_banner');
+          $originalFileName = $file->getClientOriginalName();
+          $cleanFileName = preg_replace('/[^A-Za-z0-9\-]/', '-', pathinfo($originalFileName, PATHINFO_FILENAME));
+          $cleanFileNameWithExtension = $cleanFileName . '.' . $file->getClientOriginalExtension();
+          $tour_banner = $file->storeAs('img', $cleanFileNameWithExtension, 'public');
+        }
+        //echo $category_level;die;
+        $dataAry = [
+          "tour_code" => $request->$tour_code,
+          "tour_title" => $request->$tour_title,
+          "tour_slug" => $request->$tour_slug,
+          "tour_duration_day" => $request->$tour_duration_days,
+          "tour_duration_night" => $request->$tour_duration_night,
+          "tour_type" => $request->$tour_type,
+          "tour_start_location" => $request->$tour_start, 
+          "tour_group_size_adult" => $request->$tour_group_size_adult,
+          "tour_group_size_child" => $request->$tour_group_size_child,
+          "tour_featured_image" => $request->$tour_banner,
+          "is_draft" => 1,
+          "is_publish" => 0,
+          'status' => 1, 
+          'created_at' => date("Y-m-d"), 
+          'updated_at' => date("Y-m-d"),
+        ];
+        //echo "<pre>";print_r($dataAry);echo "</pre>"; //die;
+        if(TourModel::insert($dataAry)){
+          return back()->withInput()->with('tour_requiredfields_success', 'Required fields of Tour added successfully!');
+        } else {
+          return back()->withInput()->with('tour_requiredfields_error', 'Unable to add Required fields of new tour');
+        }
+      } catch (\Exception $e) {
+        return back()->withInput()->with('tour_category_store_error', $e->getMessage());
+      }
+    }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Store a newly created resource in storage.
@@ -196,6 +266,51 @@ class TourController extends Controller
      */
     public function edit(Request $request)
     {
+
+      $str="";
+      $data['menu_types'] = MenuTypesModel::getAll();
+      $data['slider_types'] = SliderTypesModel::getAll();
+      $data['page_title'] = "Manage Tours";
+      $data['logo'] = GeneralSettingsModel::getLogo();
+      $first_level = TourCategoryModel::getAllParentTourCategory();
+      if(!empty($first_level)){
+        $str .= "<ul>";
+        foreach($first_level as $fl){
+          $str .= '<li>'.$fl->tour_category_title.'</li>';//die;
+          $second_level = TourCategoryModel::getChildTourCategory($fl->tour_category_id);
+          if(!empty($second_level)){
+            $str .= "<ul>";
+            foreach($second_level as $sl){
+              $str .= '<li>'.$sl->tour_category_title.'</li>';//die;
+              $third_level = TourCategoryModel::getChildTourCategory($sl->tour_category_id);
+              if(!empty($third_level)){
+                $str .= "<ul>";
+                foreach($third_level as $tl){
+                  $str .= '<li>'.$tl->tour_category_title.'</li>';//die;
+                  
+                }
+                $str .= "</ul>";
+              }
+            }
+            $str .= "</ul>";
+          }
+        }
+        $str .= "</ul>";
+      }
+      $data['tree'] = $str;
+      $data['categories'] = TourCategoryModel::getAll();
+
+      $data['tours'] = TourModel::getAll();
+
+      //echo "<pre>";print_r($data['tour_categories']);echo "</pre>";die;
+      return view('admin/tour_category_list', $data);
+
+
+
+
+
+
+
         $data = [];
         $tour_category_id = $request->segment(3);
         //if(!empty($slug)) { $data['slug'] = $slug; } 

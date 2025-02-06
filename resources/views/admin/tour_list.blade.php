@@ -1,268 +1,116 @@
 @extends('admin.app')
-@section('title', 'Page Title')
+@section('title', $page_title)
 
 @section('page_css')
-
+  
 @endsection
 @section('content')
-<!-- Page header -->
 <div class="page-header d-print-none mt-0">
-  <div class="container-xl">
-    <div class="row g-2 align-items-center">
-      <div class="col">
-        <h2 class="page-title">{{$page_title}}</h2>
-      </div>
-      <div class="col-auto ms-auto d-print-none">
-        <div class="btn-list">
-          <a href="{{route('page.list')}}" class="btn btn-primary d-none d-sm-inline-block">
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-big-left-line"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 15v3.586a1 1 0 0 1 -1.707 .707l-6.586 -6.586a1 1 0 0 1 0 -1.414l6.586 -6.586a1 1 0 0 1 1.707 .707v3.586h6v6h-6z" /><path d="M21 15v-6" /></svg>
-              Back
-          </a>
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <div class="page-pretitle">Manage</div>
+                <h2 class="page-title">Tours</h2>
+            </div>
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <a href="{{route('tour.add')}}" class="btn btn-primary d-none d-sm-inline-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                        New Tour
+                  </a>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <!-- Page body -->
 <div class="page-body">
-  <div class="container-xl">
-    <div class="card">
-      <div class="card-body">
-        @if(session('page_store_success'))
-          <div class="alert alert-success">{{ session('page_store_success') }}</div>
-        @endif
-        @if(session('page_store_error'))
-          <div class="alert alert-danger">{{ session('page_store_error') }}</div>
-        @endif
-        <form id="add_page" name="add_page" class="outer-repeater float-none" method="POST" enctype="multipart/form-data" action="{{route('page.store')}}">
-          @csrf
-          <div class="card-body p-4">
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label for="page_title" class="form-label">Page Title <span class="required">*</span></label>
-                  <input class="form-control" id="page_title" name="page_title" type="text" placeholder="Enter Page Title"  value="{{ old('page_title') }}"/>
-                  @error('page_title')
-                    <span class="error_msg">{{ $message }}</span>
-                  @enderror
-                </div>                                           
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label for="page_slug" class="form-label">Page Slug <span class="required">*</span></label>
-                  <input class="form-control" id="page_slug" name="page_slug" type="text" placeholder="Enter Page Slug" value="{{ old('page_slug') }}"/>
-                  @error('page_slug')
-                    <span class="error_msg">{{ $message }}</span>
-                  @enderror
-                </div>                                           
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label for="page_subtitle" class="form-label">Page Subtitle (Optional)</label>
-                  <input class="form-control" id="page_subtitle" name="page_subtitle" type="text" placeholder="Enter Page Subtitle" value="{{ old('page_subtitle') }}"/>
-                  <span class="error_page_subtitle" id="error_page_subtitle"></span>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-3"> 
-                  <label for="page_template" class="form-label">Page Category  <span class="required">*</span></label>
-                  <select class="form-select" name="page_category" id="page_category">
-                    <option value="">Select Category</option>
-                    @if(!empty($page_categories))
-                      @foreach ($page_categories as $page_category) 
-                        <option value='{{ $page_category->id }}' @if(old('page_category') == $page_category->name) selected="selected" @endif >{{$page_category->name}}</option>
-                      @endforeach
-                    @endif
-                  </select>
-                  @error('status')
-                    <span class="error_msg">{{ $message }}</span>
-                  @enderror
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-3"> 
-                  <label for="page_template" class="form-label">Page Template <span class="required">*</span></label>
-                  <select class="form-select" name="page_template" id="page_template">
-                    <option value="">Select Template</option>
-                    @if(!empty($files))
-                      @foreach ($files as $file) 
-                        <option value='{{ $file }}' @if(old('page_template') == $file) selected="selected" @endif >{{$file}}</option>
-                      @endforeach
-                    @endif
-                  </select>
-                  @error('page_template')
-                    <span class="error_msg">{{ $message }}</span>
-                  @enderror
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-3"> 
-                  <label for="page_template" class="form-label">Status <span class="required">*</span></label>
-                  <select class="form-select" name="status" id="status">
-                    <option value='1'>Active</option>
-                    <option value='0'>Inactive</option>
-                  </select>
-                  @error('status')
-                    <span class="error_msg">{{ $message }}</span>
-                  @enderror
-                </div>
-              </div>          
-              <div class="col-lg-6">
-                <div class="mb-2">
-                  <label for="page_excerpt" class="form-label">Page Excerpt (Optional)</label>
-                  <textarea rows="1" class="form-control" id="page_excerpt" name="page_excerpt" placeholder="Enter page excerpt">{{ old('page_excerpt') }}</textarea>
-                  <span class="error_msg" id="error_page_excerpt"></span>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label for="page_banner" class="form-label">Page Banner (Optional)</label>
-                  <input class="form-control" id="page_banner" name="page_banner" type="file"/>
-                  <span class="error_msg" id="error_page_banner"></span>
-                </div>
-              </div>
-            </div>
-            <div class="row" style="background-color:#eee;padding:10px;margin:0px">
-              <b style="padding-bottom:10px;">Page Meta</b>
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label for="meta_title" class="form-label">Meta Title (Optional)</label>
-                  <textarea class="form-control" name="meta_title" id="meta_title" rows="2">{{ old('page_slug')}}</textarea>
-                  <span class="error_msg" id="error_meta_title"></span>
-                </div> 
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label for="meta_keyword" class="form-label">Meta Keyword (Optional)</label>
-                  <textarea class="form-control" name="meta_keyword" id="meta_keyword" rows="2">{{ old('page_slug')}}"</textarea>
-                  <span class="error_msg" id="error_meta_keyword"></span>
-                </div> 
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label for="meta_description" class="form-label">Meta Description (Optional)</label>
-                  <textarea class="form-control" name="meta_description" id="meta_description" rows="2">{{ old('page_slug') }}</textarea>
-                  <span class="error_msg" id="error_description"></span>
-                </div> 
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label for="other_header_html" class="form-label">Any Other Header HTML/script (Optional)</label>
-                  <textarea class="form-control" name="other_header_html" id="other_header_html" rows="2">{{ old('page_slug') }}</textarea>
-                  <span class="error_msg" id="error_other_header_html"></span>
-                </div> 
-              </div>
-            </div>
-            <div class="row mt-2">
-              <div class="col-lg-12">
-                <div class="mb-3">
-                  <label for="content" class="form-label">Content (Optional)</label>
-                  <textarea class="content" id="content" name="content" rows="4" cols="55"> {{ old('content') }}</textarea>
-                  <span class="error_msg" id="error_content"></span>
-                </div>                                           
-              </div>
-            </div>
-            <!-- <div id="SectioContent">
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="mb-3">
-                    <label for="page_section" class="form-label">Section (Optional)</label>
-                    <input class="form-control" id="page_section" name="page_section[]" type="text" placeholder="Section Name" />
-                    <span class="error_page_section"></span>
-                  </div>  
-                  <div class="mb-3">
-                    <label for="section_content" class="form-label">Section Content (Optional)</label><br>
-                    <textarea class="section_content" id="section_content" name="section_content[]" rows="4" cols="80"></textarea>
-                    <span class="error_msg" id="error_content"></span>
-                  </div> 
-                </div>
-              </div>
-            </div> -->
-            <div class="row">
-              <!-- <div class="col-lg-6 text-center">
-                <input type="button" class="btn btn-info add_section" id="add_section" value="Add Section">
-              </div> -->
-              <div class="col-lg-12 text-center">
-                <button type="submit" class="btn btn-primary waves-effect waves-light" id="insert">Save</button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+    <div class="container-xl">
+        <div class="card">
+            <div class="card-body">
+                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+                    <thead>
+                        <tr>
+                            <th style="width:5%;" class="text-center">S. No.</th>
+                            <th style="width:15%;" class="text-center">Title</th>
+                            <th style="width:15%;" class="text-center">Subtitle</th>
+                            <th style="width:15%;" class="text-center">Slug</th>
+                            <th style="width:8%;" class="text-center">View Tour</th>
+                            <th style="width:12%;" class="text-center">Banner</th>
+                            <th style="width:8%;" class="text-center">Status</th>
+                            <th style="width:12%;" class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(!empty($tours))
+                            @foreach($tours as $tour)
+                                <tr>
+                                    <td class="text-center">{{ $loop->index + 1}}</td>
+                                    <td class="text-center">{!!$tour->tour_title!!}</td>
+                                    <td class="text-center">{!!$tour->tour_subtitle!!}</td>
+                                    <td class="text-center">{!!$tour->tour_slug!!}</td>
+                                    <td class="text-center">
+                                        <a href="{{route($tour->tour_slug)}}" target="_new">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-eye-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M11.102 17.957c-3.204 -.307 -5.904 -2.294 -8.102 -5.957c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6a19.5 19.5 0 0 1 -.663 1.032" /><path d="M15 19l2 2l4 -4" /></svg>
+                                        </a>
+                                    </td>
+                                    <td class="text-center"><img src="{{ asset('storage/' . $tour->tour_banner) }}" style="height:40px;width:auto;"></td>
+                                    <td class="text-center">{!!$tour->tour_template!!}</td>
+                                    <td class="text-center">@if($tour->status == 1) Active @else Inactive @endif</td>
 
+                                    <td class="text-center">
+                                        <a type="button" class="btn" href="{{ route('tour.edit', ['tour_id' => $tour->tour_id]) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path><path d="M16 5l3 3"></path></svg>
+                                        </a>
+                                        <button type="button" class="btn" onclick="slider_delete(5);">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif                      
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('page_script')
-
 <script>
-$('#content').summernote({
-    placeholder: '',
-    tabsize: 2,
-    height: 300
-  });
-
-  /*   $("#section_content").summernote({
-    placeholder: '',
-    tabsize: 2,
-    height: 100
-  });*/
+function deleteTour(tourId){
+    if(tourId!=""){
+        Swal.fire({
+            icon: "question",
+            title: 'Are you sure?',
+            text: 'you want to delete this tour!',
+            showDenyButton: true,
+            confirmButtonText: 'Yes, delete it',
+            denyButtonText: 'No, keep it',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{route('tour.delete')}}",
+                        data: {'tourId':tourId},
+                        success: function(response)
+                        {
+                            response=JSON.parse(response);
+                            console.log(response);
+                            if(response.status==1){
+                                    Swal.fire({icon: 'success',title: response.msg}).then((result) => {
+                                    window.location.href="{{route('tour.list')}}";                        
+                                    });
+                            }else{
+                                Swal.fire({icon: 'error', title: ' Something went wrong!'});
+                            }
+                        }
+                    })
+                } 
+                else if (result.isDenied) {
+                }
+            })
+        }
+    }
 </script>
-<script>
-$(document).ready(function(){
-    $("#page_title").keyup(function(e){
-       e.preventDefault();
-       var title = $("#page_title").val();
-       var str = title.replace(/\W+(?!$)/g, '-').toLowerCase();
-       str = str.replace(/\W$/, '').toLowerCase();
-       $('#page_slug').val(str);
-    });
-
-    $("#page_slug").keyup(function(e){
-       e.preventDefault();
-       var title = $("#page_slug").val();
-       var str = title.replace(/\W+(?!$)/g, '-').toLowerCase();
-       str = str.replace(/\W$/, '').toLowerCase();
-       $('#page_slug').val(str);
-    });
-});
-
-/*
-var i=1;
-$('body').on('click', '.add_section', function() {   
-    var row='\
-    <div class="row mt-3 mb-3" style="padding: 10px;background-color: #eee;">\
-        <div class="col-lg-10">\
-            <div class="mb-3">\
-                <label for="example-text-input" class="form-label">Section</label>\
-                <input class="form-control" id="page_section" name="page_section[]" type="text" placeholder="Section Name" />\
-                    <span class="error_page_section"></span>\
-            </div>\
-            <div class="mb-3">\
-                <label for="example-text-input" class="form-label">Content</label>\
-                <br>\
-                <textarea class="section_content" id="section_content'+i+'" name="section_content[]" rows="4" cols="80"></textarea>\
-                <span class="error_msg" id="error_content"></span>\
-            </div>\
-        </div>\
-        <div class="col-lg-2">\
-            <input type="button" class="btn btn-danger delRow" id="" value="Delete Section">\
-        </div>\
-    </div>';
-    $("#SectioContent").append(row);
-    $('#section_content'+i).summernote({
-        placeholder: '',
-        tabsize: 2,
-        height: 100
-      });
-    i++;
-});
-
-$('body').on('click', '.delRow', function() {
-    $(this).closest('div.row').remove();
-}); */
-</script>
-
 @endsection
-

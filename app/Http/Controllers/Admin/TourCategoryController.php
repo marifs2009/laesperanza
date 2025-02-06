@@ -66,8 +66,8 @@ class TourCategoryController extends Controller
       $data['slider_types'] = SliderTypesModel::getAll();
       $data['tour_category_title'] = "Add Tour Category";
       $data['logo'] = GeneralSettingsModel::getLogo();
-      $data['tour_parent_categories'] = TourCategoryModel::getAll();
-      //print_r($data['tour_parent_categories']);
+      $data['tour_categories'] = TourCategoryModel::getAll();
+      //echo "<pre>";print_r($data['tour_categories']);echo "</pre>";die;
       return view('admin/tour_category_add', $data);
     }
 
@@ -85,10 +85,6 @@ class TourCategoryController extends Controller
       
       $data['logo'] = GeneralSettingsModel::getLogo();
       $first_level = TourCategoryModel::getAllParentTourCategory();
-
-      //$data['fourth_level'] = TourCategoryModel::get4thLavelTourCategory();
-      //$data['fifth_level'] = TourCategoryModel::get5thLavelTourCategory();
-
       if(!empty($first_level)){
         $str .= "<ul>";
         foreach($first_level as $fl){
@@ -114,7 +110,7 @@ class TourCategoryController extends Controller
         $str .= "</ul>";
       }
       $data['tree'] = $str;
-      $data['categories'] = TourCategoryModel::getAll();
+      $data['tour_categories'] = TourCategoryModel::getAll();
 
 
 

@@ -68,9 +68,9 @@
                   <label for="tour_category_template" class="form-label">Parent Tour Category <span class="required">*</span></label>
                   <select class="form-select" name="tour_parent_category_id" id="tour_parent_category_id">
                     <option value="-1">No Parent</option>
-                    @if(!empty($tour_parent_categories))
-                      @foreach ($tour_parent_category_ids as $tour_parent_category_id) 
-                        <option value='{{ $tour_category->id }}' @if(old('tour_category') == $tour_category->name) selected="selected" @endif >{{$tour_category->name}}</option>
+                    @if(!empty($tour_categories))
+                      @foreach ($tour_categories as $tour_category) 
+                        <option value='{{ $tour_category->tour_category_id }}' @if(old('tour_category') == $tour_category->tour_category_title) selected="selected" @endif >{{$tour_category->tour_category_title}}</option>
                       @endforeach
                     @endif
                   </select>

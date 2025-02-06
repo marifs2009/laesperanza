@@ -20,7 +20,7 @@
         <link href="{{ URL::asset('css/tabler-payments.min.css?1685973381')}}" rel="stylesheet"/>
         <link href="{{ URL::asset('css/tabler-vendors.min.css?1685973381')}}" rel="stylesheet"/>
         <link href="{{ URL::asset('css/demo.min.css?1685973381')}}" rel="stylesheet"/>
-
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.2/dist/css/tom-select.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
         <style>
         @import url('https://rsms.me/inter/inter.css');
@@ -57,6 +57,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.2/dist/js/tom-select.complete.min.js"></script>
         @yield('page_script')
 
     </body>
