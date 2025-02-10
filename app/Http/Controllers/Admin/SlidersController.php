@@ -43,7 +43,6 @@ class SlidersController extends Controller
       $m = SliderTypesModel::getsliderNameByTypeId($slider_type_id); 
       $data['slider_type_id'] = $slider_type_id;
       $data['page_title'] = "Manage : ".$m['slider_type_name'];
-      $data['slider_types'] = SliderTypesModel::getAll();
       $data['logo'] = GeneralSettingsModel::getLogo();
       $data['slider_types'] = SliderTypesModel::getAll();
       $data['menu_types'] = MenuTypesModel::getAll();
@@ -168,25 +167,73 @@ class SlidersController extends Controller
       }
     }
 
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      */
+    // public function delete(Request $request)
+    // {
+    //   try {
+    //     $slider_id=$request->slider_id;
+
+    //     $dataAry = [ 
+    //       'status' => 2, 
+    //       'updated_at' => date("y-m-d")  
+    //     ];
+    //     //echo $request->slider_id; die;
+    //     if(SlidersModel::where('slider_id', $slider_id)->updtae($dataAry)){
+    //       return back()->with('slider_delete_success', 'Slide deleted successfully');
+    //     } else {
+    //       return back()->with('slider_delete_error','Unable to deleted slide');
+    //     }
+    //   } catch (\Exception $e) {
+    //     return back()->with('slider_delete_error',$e->getMessage());
+    //   }
+    // }
     public function delete(Request $request)
-    {
-      try {
-        //echo $request->slider_id; die;
-        if(SlidersModel::where('slider_id', $request->slider_id)->delete()){
-          return response()->json(['msg' => 'Slide deleted successfully.', 'status' => 1]);
+{
+    try {
+        $slider_id = $request->slider_id;
+
+        $dataAry = [ 
+                'status' => 2, 
+               'updated_at' => date("y-m-d")  
+             ];
+             $updated = SlidersModel::where('slider_id', $slider_id)->update($dataAry);
+        // Delete the slider
+        if ($updated) {
+          return back()->with('slider_delete_success', 'Slide deleted successfully');
         } else {
-          return response()->json(['msg' => 'Unable to delete slide.', 'status' => 0]);
+            return back()->with('slider_delete_error', 'Unable to delete slide');
         }
-      } catch (\Exception $e) {
-        return response()->json(['msg' => $e->getMessage(), 'status' => 0]);
-      }
+
+    } catch (\Exception $e) {
+        return back()->with('slider_delete_error', $e->getMessage());
     }
 
-           
+
+
+//     $updated = TourCategoryModel::where('id', $tour_category_id)->update($dataAry);
+
+//     if ($updated) {
+//         return back()->with('tour_delete_success', 'Tour category deleted successfully!');
+//     } else {
+//         return back()->with('tour_delete_error', 'Unable to delete tour category');
+//     }
+// } catch (\Exception $e) {
+//     // \log::error('Delete Error:', ['message' => $e->getMessage()]);
+//     return back()->with('tour_delete_error', $e->getMessage());
+// }
+
+
+
+
+
+
+}
+
 }

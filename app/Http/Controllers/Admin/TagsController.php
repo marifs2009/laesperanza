@@ -11,6 +11,7 @@ use App\Models\Admin\TagsModel;
 use App\Models\Admin\ActivityModel;
 use App\Models\Admin\OffersModel;
 use App\Models\Admin\GeneralSettingsModel;
+use Symfony\Component\Mailer\Header\TagHeader;
 
 class TagsController extends Controller
 {
@@ -58,4 +59,64 @@ class TagsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+     public function update(Request $request){
+      try{
+        $tag_id=$request->tag_id;
+        $request->validate([
+          'tag_name'=>'required|string|max:255',
+        ]);
+        $dataAry=[
+          'tag_name'=>$request->tag_name,
+          'status'=>1,
+          'updated_at'=>now(),
+        ];
+        $tag=TagsModel::where('tag_id',$tag_id)->update($dataAry);
+        if($tag){
+          return back()->with('tags_update_success','tags update successfully');
+        }
+        else{
+          return back()->with('tags_update_error','unable to update tags');
+        } 
+      }
+      catch(\Exception $e){
+        return back()->with('tags_update_error',$e->getMessage());
+      }
+    }
+
+
+
+
+
+
+
+
+
+     public function delete(Request $request)
+     {
+      try{
+        $tag_id=$request->tag_id;
+
+        $dataAry=[
+          'status'=>2,
+          'updated_at'=>date("Y-m-d")
+        ];
+
+        $soft_delete=TagsModel::where('tag_id',$tag_id)->update($dataAry);
+        if($soft_delete){
+          return back()->with('tags_delete_success','tags deleted successfully');
+        }
+        else{
+          return back()->with('tags_delete_error','unable to delete tag successfully');
+        }
+      }
+      catch(\Exception $e){
+        return back()->with('tags_delete_error',$e->getMessage());
+      }
+     }
+
+
+
+
 }

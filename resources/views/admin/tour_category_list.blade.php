@@ -34,6 +34,13 @@
                         {!!$tree!!}                        
                     </div>
                     <div class="col-md-8">
+                        @if(session('tour_delete_success'))
+                        <div class="alert alert-success"><strong>Success!</strong> {{session('tour_delete_success')}}</div>
+                      @endif
+                      @if(session('touor_delete_error'))
+                        <div class="alert alert-danger"><strong>Error!</strong> {{session('tour_delete_error')}}</div>
+                      @endif
+                      
                          <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                         <thead>
                             <tr>
@@ -58,13 +65,18 @@
                                         <td class="text-center">@if($category->status == 1) Active @else Inactive @endif</td>
 
                                         <td class="text-center">
-                                            <a type="button" class="btn" href="">
+                                            <a type="submit" class="btn" href="{{ route('tour.edit', ['tour_category_id' => $category->tour_category_id]) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path><path d="M16 5l3 3"></path></svg>
                                             </a>
-                                            <button type="button" class="btn" onclick="slider_delete(5);">
+                                            <form method="POST" action="{{ route('tour.delete') }}" id="form-tour-delete-{{$category->tour_category_id}}">
+                                                @csrf
+                                                <input type="hidden" name="tour_type_id" value="{{$category->tour_category_id }}">
+                                               <button type="submit" class="btn">
                                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
                                             </button>
+                                            </form>
                                         </td>
+                                        
                                     </tr>
                                 @endforeach
                             @endif                      

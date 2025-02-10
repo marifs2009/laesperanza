@@ -171,6 +171,30 @@
                     <div class="col-12">
                       <div class="card">
                         <div class="table-responsive">
+
+                          @if(session('role_delete_success'))
+                           <div class="alert alert-success">
+                             <strong>Success!</strong> {{ session('role_delete_success') }}
+                           </div>
+                          @endif
+
+                          @if(session('role_delete_error'))
+                          <div class="alert alert-success">
+                            <strong>! Error</strong>{{session('role_delete_error')}}
+                          </div>
+                          @endif
+
+                          @if(session('role_update_success'))
+                          <div class="alert alert-success">
+                            <strong>!Success</strong>{{session('role_update_success')}}
+                          </div>
+                          @endif
+                          @if(session('role_update_error'))
+                          <div class="alert alert-error">
+                            <strong>!Error</strong>{{session('role_updated_error')}}
+                          </div>
+                          @endif
+
                           <table class="table table-vcenter card-table table-striped">
                             <thead>
                               <tr>
@@ -186,7 +210,7 @@
                                 <td width="10%">{{ $loop->index + 1 }}</td>
                                 <td width="70%">{{ $role->name }}</td>
                                 <td width="20%">
-                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-edit-role-{{ $role->id }}">
+                                  <button type="submit" class="btn" data-bs-toggle="modal" data-bs-target="#modal-edit-role-{{ $role->id }}">
                                   <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                                   </button>
                                   <div class="modal modal-blur fade" id="modal-edit-role-{{ $role->id }}" tabindex="-1" style="display: none;" aria-hidden="true">
@@ -196,24 +220,29 @@
                                           <h5 class="modal-title">Roles</h5>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form id="form-edit-role" method="post">
+                                        <form id="form-update-role" method="post" action={{route('admin.role.update')}}>
                                         @csrf
+                                        <input type="hidden" name="id" value="{{ $role->id}}" >
                                           <div class="modal-body">
                                             <h5 class="modal-title">Edit role</h5>
                                               <div class="col-auto">
-                                                <input type="text" value="{{ $role->name }}" name="new-role" class="form-control" placeholder="Add new role">
+                                                <input type="text" value="{{ $role->name }}" name="role" class="form-control" placeholder="Update role">
                                               </div>
                                           </div>
                                           <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                                            <button type="submit" class="btn btn-primary"   data-bs-dismiss="modal">Save</button>
                                           </div>
                                         </form>
                                       </div>
                                     </div>
                                   </div>
-                                  <button type="button" class="btn">
+                                  <form id="form-delete-role" method="post" action="{{route('admin.role.delete')}}" value="{{$role->id}}">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $role->id}}" >
+                                  <button type="submit" class="btn">
                                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                   </button>
+                                  </form>
                                 </td>
                               </tr>
                               @endforeach
@@ -248,6 +277,29 @@
                     <div class="col-12">
                       <div class="card">
                         <div class="table-responsive">
+
+                          @if(session('meal_delete_success'))
+                          <div class="alert alert-success">
+                            <strong>!Success</strong>{{session('meal_delete_success')}}
+                          </div>
+                          @endif
+                          @if(session('meal_delete_error'))
+                          <div class="alert alert-success">
+                            <strong>!Error</strong>{{session('meal_delete_eroor')}}
+                          </div>
+                          @endif
+
+                          @if(session('meal_update_success'))
+                          <div class="alert alert-success">
+                            <strong>!Success</strong>{{session('meal_update_success')}}
+                          </div>
+                          @endif
+                          @if(session('meal_update_error'))
+                          <div class="alert alert-success">
+                            <strong>!Error</strong>{{session('meal_update_error')}}
+                          </div>
+                          @endif
+
                           <table class="table table-vcenter card-table table-striped">
                             <thead>
                               <tr>
@@ -275,8 +327,9 @@
                                           <h5 class="modal-title">Meals</h5>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form id="form-edit-meal" method="post">
+                                        <form id="form-edit-meal" method="post" action="{{route('admin.meals.update')}}">
                                         @csrf
+                                        <input type="hidden" name="meal_type_id" value="{{ $meal->meal_type_id}}" >
                                           <div class="modal-body">
                                             <h5 class="modal-title">Edit Meal</h5>
                                             <div class="col-12 mt-2 mb-2">
@@ -287,22 +340,22 @@
                                               <div>Description</div> 
                                               <textarea name="meal_type_description" id="meal_type_description" class="form-control" placeholder="Add Meal Detail">{{ $meal->meal_type_description }}</textarea>
                                             </div>
-                                            <div class="col-12 mt-2 mb-5 text-center">
-                                              <button id="submit-meals" type="button" class="btn btn-primary ms-auto">
-                                              <span id="loading-meals" style="display:none;"><i class="fa fa-spinner fa-spin"></i>&nbsp;</span> Add</button>
-                                            </div>      
-                                          </div>
+                                         </div>
                                           <div class="modal-footer">
-                                            <button id="submit-meals" type="button" class="btn btn-primary ms-auto">
+                                            <button id="submit-meals" type="submit" class="btn btn-primary ms-auto">
                                             <span id="loading-meals" style="display:none;"><i class="fa fa-spinner fa-spin"></i>&nbsp;</span> Update</button>
                                           </div>
                                         </form>
                                       </div>
                                     </div>
                                   </div>
-                                  <button type="button" class="btn">
+                                  <form id="form-delete-meals" method="post" action="{{route('admin.meals.delete')}}" value="{{$meal->meal_type_id}}">
+                                    @csrf
+                                    <input type="hidden" name="meal_type_id" value="{{ $meal->meal_type_id}}" >
+                                  <button type="submit" class="btn">
                                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                   </button>
+                                  </form>
                                 </td>
                               </tr>                              
                               @endforeach
@@ -336,6 +389,33 @@
                     <div class="col-12">
                       <div class="card">
                         <div class="table-responsive">
+
+                          @if(session('menutype_delete_success'))
+                          <div class="alert alert-success">
+                            <strong>!Success</strong>{{session('menutype deleted successfully')}}
+                          </div>
+                          @endif
+
+                          @if(session('menutype_delete_error'))
+                          <div class="alert alert-error">
+                            <strong>!Error</strong>{{session('menutype_delete_error')}}
+                          </div>
+                          @endif
+
+
+                          @if(session('menu_type_update_success'))
+                          <div class="alert alert-success">
+                            <strong>!success</strong>{{session('menu_type_update_success')}}
+                          </div>
+                          @endif
+                          @if(session('menu_type_update_error'))
+                          <div class="alert alert-error">
+                            <strong>!success</strong>{{session('menu_type_update_error')}}
+                          </div>
+                          @endif
+
+
+
                           <table class="table table-vcenter card-table table-striped">
                             <thead>
                               <tr>
@@ -353,18 +433,19 @@
                                 <td>{{ $menu_type->menu_type_name }}</td>
                                 <td>{!! $menu_type->menu_type_description !!}</td>
                                 <td>
-                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-simple">
+                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-simple-{{ $menu_type->menu_type_id }}">
                                   <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                                   </button>
-                                  <div class="modal modal-blur fade" id="modal-simple" tabindex="-1" style="display: none;" aria-hidden="true"  role="document">
+                                  <div class="modal modal-blur fade" id="modal-simple-{{ $menu_type->menu_type_id }}" tabindex="-1" style="display: none;" aria-hidden="true"  role="document">
                                     <div class="modal-dialog modal-dialog-centered">
                                       <div class="modal-content">
                                         <div class="modal-header">
                                           <h5 class="modal-title">Menu Type</h5>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form id="form-edit-menu-type" method="post">
+                                        <form id="form-edit-menu-type" method="post" action="{{route('admin.menutype.update')}}">
                                         @csrf
+                                        <input type="hidden" name="menu_type_id" value="{{ $menu_type->menu_type_id}}" >
                                           <div class="modal-body">
                                             <h5 class="modal-title">Edit Menu Type</h5>
                                             <div class="col-12 mt-2 mb-2">
@@ -374,23 +455,23 @@
                                             <div class="col-12 mt-2 mb-2">
                                               <div>Description</div> 
                                               <textarea name="menu_type_description" id="menu_type_description" class="form-control" placeholder="Add menu type detail">{{ $menu_type->menu_type_description }}</textarea>
-                                            </div>
-                                            <div class="col-12 mt-2 mb-5 text-center">
-                                              <button id="submit-edit-menu-type" type="button" class="btn btn-primary ms-auto">
-                                              <span id="loading-menu-type" style="display:none;"><i class="fa fa-spinner fa-spin"></i>&nbsp;</span> Add</button>
-                                            </div>      
+                                            </div>     
                                           </div>
                                           <div class="modal-footer">
-                                            <button id="submit-menu-type1" type="button" class="btn btn-primary ms-auto">
+                                            <button id="submit-menu-type1" type="submit" class="btn btn-primary ms-auto">
                                             <span id="loading-menu-type" style="display:none;"><i class="fa fa-spinner fa-spin"></i>&nbsp;</span> Update</button>
                                           </div>
                                         </form>
                                       </div>
                                     </div>
                                   </div>
-                                  <button type="button" class="btn">
+                                  <form id="form-delete-menu_type" method="post" action="{{route('admin.menutype.delete')}}" value="{{$menu_type->menu_type_id}}">
+                                    @csrf
+                                    <input type="hidden" name="menu_type_id" value="{{ $menu_type->menu_type_id}}" >
+                                  <button type="submit" class="btn">
                                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                   </button>
+                                  </form>
                                 </td>
                               </tr>                              
                               @endforeach
@@ -425,6 +506,31 @@
                     <div class="col-12">
                       <div class="card">
                         <div class="table-responsive">
+                          @if(session('sliderTypes_delete_success'))
+                          <div class="alert alert-success">
+                            <strong>! Success</strong>{{session('sliderTypes_delete_success')}}
+                          </div>
+                          @endif
+                          @if(session('sliderType_delete_error'))
+                          <div class="alert alert-error">
+                            <strong>! Error</strong>{{session('sliderType_delete_error')}}
+                          </div>
+                          @endif
+
+                          @if(session('sliderTypes_update_success'))
+                          <div class="alert alert-success">
+                            <strong>! Success</strong>{{session('sliderTypes_update_success')}}
+                          </div>
+                          @endif
+
+                          @if(session('sliderType_update_error'))
+                          <div class="alert alert-error">
+                            <strong>! Error</strong>{{session('sliderType_update_error')}}
+                          </div>
+                          @endif
+
+
+
                           <table class="table table-vcenter card-table table-striped">
                             <thead>
                               <tr>
@@ -442,18 +548,19 @@
                                 <td>{{ $slider_type->slider_type_name }}</td>
                                 <td>{!! $slider_type->slider_type_description !!}</td>
                                 <td>
-                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-simple">
+                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-simple-{{ $slider_type->slider_type_id }}">
                                   <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                                   </button>
-                                  <div class="modal modal-blur fade" id="modal-simple" tabindex="-1" style="display: none;" aria-hidden="true"  role="document">
+                                  <div class="modal modal-blur fade" id="modal-simple-{{ $slider_type->slider_type_id }}" tabindex="-1" style="display: none;" aria-hidden="true"  role="document">
                                     <div class="modal-dialog modal-dialog-centered">
                                       <div class="modal-content">
                                         <div class="modal-header">
                                           <h5 class="modal-title">Slider Type</h5>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form id="form-edit-slider-type" method="post">
+                                        <form id="form-edit-slider-type" method="post" action="{{route('admin.slidertype.update')}}">
                                         @csrf
+                                        <input type="hidden" name="slider_type_id" value={{$slider_type->slider_type_id}}>
                                           <div class="modal-body">
                                             <h5 class="modal-title">Edit Slider Type</h5>
                                             <div class="col-12 mt-2 mb-2">
@@ -463,23 +570,23 @@
                                             <div class="col-12 mt-2 mb-2">
                                               <div>Description</div> 
                                               <textarea name="slider_type_description" id="slider_type_description" class="form-control" placeholder="Add slider type detail">{{ $slider_type->slider_type_description }}</textarea>
-                                            </div>
-                                            <div class="col-12 mt-2 mb-5 text-center">
-                                              <button id="submit-edit-slider-type" type="button" class="btn btn-primary ms-auto">
-                                              <span id="loading-slider-type" style="display:none;"><i class="fa fa-spinner fa-spin"></i>&nbsp;</span> Add</button>
-                                            </div>      
+                                            </div>     
                                           </div>
                                           <div class="modal-footer">
-                                            <button id="submit-slider-type1" type="button" class="btn btn-primary ms-auto">
+                                            <button id="submit-slider-type1" type="submit" class="btn btn-primary ms-auto">
                                             <span id="loading-slider-type" style="display:none;"><i class="fa fa-spinner fa-spin"></i>&nbsp;</span> Update</button>
                                           </div>
                                         </form>
                                       </div>
                                     </div>
                                   </div>
-                                  <button type="button" class="btn">
+                                  <form id="form-delete-slider_type" method="post" action="{{route('admin.slidertype.delete')}}" value="{{$slider_type->slider_type_id}}">
+                                    @csrf
+                                    <input type="hidden" name="slider_type_id" value="{{ $slider_type->slider_type_id}}" >
+                                  <button type="submit" class="btn">
                                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                   </button>
+                                  </form>
                                 </td>
                               </tr>                              
                               @endforeach
@@ -515,6 +622,29 @@
                     <div class="col-12">
                       <div class="card">
                         <div class="table-responsive">
+
+                          @if(session('tourTypes_delete_success'))
+                          <div class="alert alert-success">
+                            <strong>! Success</strong>{{session('tourTypes_delete_success')}}
+                          </div>
+                          @endif
+                          @if(session('tourTypes_delete_error'))
+                          <div class="alert alert-error">
+                            <strong>! Error</strong>{{session('tourTypes_delete_error')}}
+                          </div>
+                          @endif
+
+                          @if(session('tourType_update_success'))
+                          <div class="alert alert-success">
+                            <strong>! Success</strong>{{session('tourTypes_update_success')}}
+                          </div>
+                          @endif
+                          @if(session('tourTypes_update_error'))
+                          <div class="alert alert-error">
+                            <strong>! Error</strong>{{session('tourTypes_update_error')}}
+                          </div>
+                          @endif
+
                           <table class="table table-vcenter card-table table-striped">
                             <thead>
                               <tr>
@@ -525,25 +655,26 @@
                               </tr>
                             </thead>
                             <tbody>
-                            @if (!empty($allTourTypes))
+                            @if(!empty($allTourTypes))
                               @foreach ($allTourTypes as $tour_type)
                               <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>{{ $tour_type->tour_type_name }}</td>
                                 <td>{!! $tour_type->tour_type_description !!}</td>
                                 <td>
-                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-simple">
-                                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-simple-{{$tour_type->tour_type_id}}">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                                   </button>
-                                  <div class="modal modal-blur fade" id="modal-simple" tabindex="-1" style="display: none;" aria-hidden="true"  role="document">
+                                  <div class="modal modal-blur fade" id="modal-simple-{{$tour_type->tour_type_id}}" tabindex="-1" style="display: none;" aria-hidden="true"  role="document">
                                     <div class="modal-dialog modal-dialog-centered">
                                       <div class="modal-content">
                                         <div class="modal-header">
                                           <h5 class="modal-title">Tour Type</h5>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form id="form-edit-tour-type" method="post">
+                                        <form id="form-edit-tour-type" method="post" action="{{route('admin.tourType.update')}}">
                                         @csrf
+                                        <input type="hidden" name="tour_type_id" value="{{$tour_type->tour_type_id}}">
                                           <div class="modal-body">
                                             <h5 class="modal-title">Edit Tour Type</h5>
                                             <div class="col-12 mt-2 mb-2">
@@ -553,23 +684,23 @@
                                             <div class="col-12 mt-2 mb-2">
                                               <div>Description</div> 
                                               <textarea name="tour_type_description" id="tour_type_description" class="form-control" placeholder="Add tour type detail">{{ $tour_type->tour_type_description }}</textarea>
-                                            </div>
-                                            <div class="col-12 mt-2 mb-5 text-center">
-                                              <button id="submit-edit-tour-type" type="button" class="btn btn-primary ms-auto">
-                                              <span id="loading-tour-type" style="display:none;"><i class="fa fa-spinner fa-spin"></i>&nbsp;</span> Add</button>
                                             </div>      
                                           </div>
                                           <div class="modal-footer">
-                                            <button id="submit-tour-type1" type="button" class="btn btn-primary ms-auto">
+                                            <button id="submit-tour-type1" type="submit" class="btn btn-primary ms-auto">
                                             <span id="loading-tour-type" style="display:none;"><i class="fa fa-spinner fa-spin"></i>&nbsp;</span> Update</button>
                                           </div>
                                         </form>
                                       </div>
                                     </div>
                                   </div>
-                                  <button type="button" class="btn">
+                                  <form id="form-delete-tour_type" method="post" action="{{route('admin.tourtype.delete')}}" value="{{$tour_type->tour_type_id}}">
+                                    @csrf
+                                    <input type="hidden" name="tour_type_id" value="{{ $tour_type->tour_type_id}}" >
+                                  <button type="submit" class="btn">
                                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                   </button>
+                                  </form>
                                 </td>
                               </tr>                              
                               @endforeach
@@ -605,6 +736,28 @@
                     <div class="col-12">
                       <div class="card">
                         <div class="table-responsive">
+                          @if(session('tags_delete_success'))
+                          <div class="alert alert-success">
+                            <strong>! Success</strong>{{session('tags_delete_success')}}
+                          </div>
+                          @endif
+                          @if(session('tags_delete_error'))
+                          <div class="alert alert-error">
+                            <strong>! Error</strong>{{session('tags_delete_error')}}
+                          </div>
+                          @endif
+
+                          @if(session('tags_update_success'))
+                          <div class="alert alert-success">
+                            <strong>! Success</strong>{{session('tags_update_success')}}
+                          </div>
+                          @endif
+                          @if(session('tags_update_error'))
+                          <div class="alert alert-error">
+                            <strong>! Error</strong>{{session('tags_update_error')}}
+                          </div>
+                          @endif
+                          
                           <table class="table table-vcenter card-table table-striped">
                             <thead>
                               <tr>
@@ -620,33 +773,39 @@
                                 <td width="10%">{{ $loop->index + 1 }}</td>
                                 <td width="70%">{{ $tag->tag_name }}</td>
                                 <td width="20%">
-                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-simple">
+                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-simple-{{$tag->tag_id}}">
                                   <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                                   </button>
-                                  <div class="modal modal-blur fade" id="modal-simple" tabindex="-1" style="display: none;" aria-hidden="true">
+                                  <div class="modal modal-blur fade" id="modal-simple-{{$tag->tag_id}}" tabindex="-1" style="display: none;" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                       <div class="modal-content">
                                         <div class="modal-header">
-                                          <h5 class="modal-title">Tag</h5>
+                                          <h5 class="modal-title">Edit Tag</h5>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form id="form-logo" method="post" enctype="multipart/form-data">
+                                        <form id="form-logo" method="post" enctype="multipart/form-data" action="{{route('admin.tags.update')}}">
+                                          @csrf
+                                          <input type="hidden" name="tag_id" id="" value={{$tag->tag_id}}>
                                           <div class="modal-body">
-                                            <h5 class="modal-title">Add new tag</h5>
+                                            <h5 class="modal-title">Edit Tag</h5>
                                               <div class="col-auto">
-                                                <input type="text" name="new-tag" class="form-control" placeholder="Add new tag">
+                                                <input type="text" name="tag_name" value={{$tag->tag_name}} class="form-control" placeholder="Add new tag">
                                               </div>
                                           </div>
                                           <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
                                           </div>
                                         </form>
                                       </div>
                                     </div>
                                   </div>
-                                  <button type="button" class="btn">
+                                  <form id="form-delete-tag_type" method="post" action="{{route('admin.tags.delete')}}" value="{{$tag->tag_id}}">
+                                    @csrf
+                                    <input type="hidden" name="tag_id" value="{{ $tag->tag_id}}">
+                                  <button type="submit" class="btn">
                                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                   </button>
+                                  </form>
                                 </td>
                               </tr>
                               @endforeach
@@ -659,7 +818,7 @@
                   </div>
 
                   <div class="card-body box" id="activity_box" style="display:none;">
-                    <form id="form-activity" method="post">
+                    <form id="" method="post" action="{{route('admin.activity.store')}}">
                       @csrf
                       <div class="row align-items-center mt-2 mb-2">
                         <div class="col-12 mt-2 mb-2">
@@ -671,7 +830,7 @@
                         <textarea name="activity_description" id="activity_description" class="form-control" placeholder="Add activity description"></textarea>
                       </div>
                       <div class="col-12 mt-2 mb-2">
-                        <button id="submit-activity" type="button" class="btn btn-primary ms-auto">
+                        <button id="submit-activity" type="submit" class="btn btn-primary ms-auto">
                         <span id="loading-activity" style="display:none;"><i class="fa fa-spinner fa-spin"></i>&nbsp;</span> Add
                         Add</button>        
                       </div>
@@ -679,6 +838,42 @@
                     <div class="col-12">
                       <div class="card">
                         <div class="table-responsive">
+                          @if(session('activity_add_success'))
+                          <div class="alert alert-success">
+                            <strong>! Success</strong>{{session('activity_add_success')}}
+                          </div>
+                          @endif
+
+                          @if(session('activity_add_error'))
+                          <div class="alert alert-error">
+                            <strong>! Error </strong>{{session('activity_add_error')}}
+                          </div>
+                          @endif
+
+                          @if(session('activity_delete_success'))
+                          <div class="alert alert-success">
+                            <strong>! Success</strong>{{session('activity_delete_success')}}
+                          </div>
+                          @endif
+
+                          @if(session('activity_delete_error'))
+                          <div class="alert alert-error">
+                            <strong>! Error </strong>{{session('activity_delete_error')}}
+                          </div>
+                          @endif
+
+                          <div class="table-responsive">
+                            @if(session('activity_update_success'))
+                            <div class="alert alert-success">
+                              <strong>! Success</strong>{{session('activity_update_success')}}
+                            </div>
+                            @endif
+  
+                            @if(session('activity_update_error'))
+                            <div class="alert alert-error">
+                              <strong>! Error </strong>{{session('activity_update_error')}}
+                            </div>
+                            @endif
                           <table class="table table-vcenter card-table table-striped">
                             <thead>
                               <tr>
@@ -696,33 +891,43 @@
                                 <td width="20%">{{ $activity->activity_name }}</td>
                                 <td width="50%">{{ $activity->activity_description }}</td>
                                 <td width="20%">
-                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-simple">
+                                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal-simple-{{$activity->activity_id}}">
                                   <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                                   </button>
-                                  <div class="modal modal-blur fade" id="modal-simple" tabindex="-1" style="display: none;" aria-hidden="true">
+                                  <div class="modal modal-blur fade" id="modal-simple-{{$activity->activity_id}}" tabindex="-1" style="display: none;" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" >
                                       <div class="modal-content">
                                         <div class="modal-header">
                                           <h5 class="modal-title">activity</h5>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form id="form-logo" method="post" enctype="multipart/form-data">
+                                        <form id="form-logo" method="post" enctype="multipart/form-data" action="{{route('admin.activity.update')}}">
+                                          @csrf
+                                          <input type="hidden" name="activity_id" id="" value={{$activity->activity_id}}>
                                           <div class="modal-body">
                                             <h5 class="modal-title">Add new activity</h5>
                                               <div class="col-auto">
-                                                <input type="text" name="new-activity" class="form-control" placeholder="Add new activity">
+                                                <input type="text" name="activity_name" value={{$activity->activity_name}}  class="form-control" placeholder="Add new activity">
+                                              </div>
+                                              <div class="col-auto">
+                                                <div>Activity Description</div> 
+                                                <textarea name="activity_description" id="activity_description" value={{$activity->activity_description}} class="form-control" placeholder="Add activity description"></textarea>
                                               </div>
                                           </div>
                                           <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
                                           </div>
                                         </form>
                                       </div>
                                     </div>
                                   </div>
-                                  <button type="button" class="btn">
+                                  <form id="form-delete-activity" method="post" action="{{route('admin.activity.delete')}}" value="{{$activity->activity_id}}">
+                                    @csrf
+                                    <input type="hidden" name="activity_id" value="{{ $activity->activity_id}}">
+                                  <button type="submit" class="btn">
                                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                   </button>
+                                  </form>
                                 </td>
                               </tr>
                               @endforeach

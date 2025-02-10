@@ -14,7 +14,6 @@ use App\Models\Admin\MenusModel;
 use App\Models\Admin\SliderTypesModel;
 use App\Models\Admin\SlidersModel;
 use App\Models\Admin\PagesModel;
-use App\Models\Admin\PageSectionModel;
 use App\Models\Admin\TagsModel;
 use App\Models\Admin\ActivityModel;
 use App\Models\Admin\OffersModel;
@@ -158,7 +157,6 @@ class PagesController extends Controller
         $data['files'] = $this->getTemplateFiles(); //templates
         $data['page'] = PagesModel::getPage($page_id);
         $data['page_title'] = "Edit Page";
-        $data['page_sections'] = PageSectionModel::getAllSections($page_id);
         $data['menu_types'] = MenuTypesModel::getAll();
         $data['slider_types'] = SliderTypesModel::getAll();
         $data['logo'] = GeneralSettingsModel::getLogo();
@@ -245,17 +243,47 @@ class PagesController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
+
+    //  public function delete(Request $request)
+    //  {
+    //      try {
+    //          $slider_id = $request->slider_id;
+     
+    //          $dataAry = [ 
+    //                  'status' => 2, 
+    //                 'updated_at' => date("y-m-d")  
+    //               ];
+    //               $updated = SlidersModel::where('slider_id', $slider_id)->update($dataAry);
+    //          // Delete the slider
+    //          if ($updated) {
+    //            return back()->with('slider_delete_success', 'Slide deleted successfully');
+    //          } else {
+    //              return back()->with('slider_delete_error', 'Unable to delete slide');
+    //          }
+     
+    //      } catch (\Exception $e) {
+    //          return back()->with('slider_delete_error', $e->getMessage());
+    //      }
     public function delete(Request $request)
     {
       try {
+
+        $page_id=$request->page_id;
+        $dataAry=[
+          'status'=>2,
+          'updated_at'=>date("y-m-d")
+        ];
+
+        $soft_delete=PagesModel::where('page_id',$page_id)->update($dataAry);
+        
         //echo $request->page_id; die;
-        if(PagesModel::where('page_id', $request->page_id)->delete()){
-          return response()->json(['msg' => 'page deleted successfully.', 'status' => 1]);
+        if($soft_delete){
+          return back()->with('page_delete_success','page deleted successfully');
         } else {
-          return response()->json(['msg' => 'Unable to delete page.', 'status' => 0]);
+          return back()->with('page_delete_error','Unable to delete page');
         }
       } catch (\Exception $e) {
-        return response()->json(['msg' => $e->getMessage(), 'status' => 0]);
+        return back()->with('page_delete_error',$e->getMessage());
       }
     }
 
@@ -277,4 +305,8 @@ class PagesController extends Controller
       }
       return [];
     }
+
+
+
+    
 }

@@ -17,11 +17,8 @@ class SlidersModel extends Model
     {
         return SlidersModel::select('sliders.*', 'master_slider_types.slider_type_name as slider_type_name')
         ->leftJoin('master_slider_types', 'sliders.slider_type_id', '=', 'master_slider_types.slider_type_id')
-        ->where(['sliders.slider_type_id' => $slider_type_id])->get();
+        ->where(['sliders.slider_type_id' => $slider_type_id,'sliders.status'=>1])->get();
     } 
-
- 
-
 }
 
 

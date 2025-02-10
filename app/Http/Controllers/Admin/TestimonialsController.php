@@ -183,14 +183,20 @@ class TestimonialsController extends Controller
     public function delete(Request $request)
     {
       try {
+        $testimonial_id=$request->testimonial_id;
+        $dataAry = [
+          'status' => 2, 
+          'updated_at' => date("Y-m-d"), 
+        ];
+
         //echo $request->testimonial_id; die;
-        if(TestimonialsModel::where('testimonial_id', $request->testimonial_id)->delete()){
-          return response()->json(['msg' => 'testimonial deleted successfully.', 'status' => 1]);
+        if(TestimonialsModel::where('testimonial_id', $testimonial_id)->update($dataAry)){
+          return back()->with(['testimonial delete success.', 'Hotel deleted successfully' => 1]);
         } else {
-          return response()->json(['msg' => 'Unable to delete testimonial.', 'status' => 0]);
+          return back()->with('testimonial_delete_success','Unable to delete testimonial');
         }
       } catch (\Exception $e) {
-        return response()->json(['msg' => $e->getMessage(), 'status' => 0]);
+        return back()->with('testmimonial_delete_error', $e->getMessage());
       }
     }
 

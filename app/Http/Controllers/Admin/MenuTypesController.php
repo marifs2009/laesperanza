@@ -58,6 +58,33 @@ class MenuTypesController extends Controller
     }  
 
 
+    public function update(Request $request){
+      try{
+        $menu_type_id=$request->menu_type_id;
+        $request->validate([
+          'menu_type_name'=>'required|string|max:255',
+          'menu_type_description'=>'required',
+        ]);
+        $dataAry=[
+          'menu_type_name'=>$request->menu_type_name,
+          'menu_type_description'=>$request->menu_type_description,
+          'status'=>1,
+          'updated_at'=>now(),
+        ];
+        $menu=MenuTypesModel::where('menu_type_id',$menu_type_id)->update($dataAry);
+        if($menu){
+          return back()->with('menu_type_update_success','menu update successfully');
+        }
+        else{
+          return back()->with('menu_type_update_error','menu type updated error');
+        } 
+      }
+      catch(\Exception $e){
+        return back()->with('menu_type_update_error',$e->getMessage());
+      }
+    }
+
+
 
     
     /**
@@ -65,4 +92,27 @@ class MenuTypesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function delete(Request $request)
+     {
+       try {
+         $menu_type_id=$request->menu_type_id;
+         $dataAry=[
+           'status'=>2,
+           'updated_at'=>date("Y-m-d")
+         ];
+         $soft_delete=MenuTypesModel::where('menu_type_id',$menu_type_id)->update($dataAry);
+         if($soft_delete)
+         {
+           return back()->with('menu_delete_success','menu deleted successfully');
+         }
+         else{
+           return back()->with('menu_delete_error','unable to delete menu');
+         }
+       }
+       catch(\Exception $e){
+         return back()->with('menu_delete_error',$e->getMessage());
+       }
+   
+     }
 }

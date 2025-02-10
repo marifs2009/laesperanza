@@ -28,17 +28,21 @@
     <div class="container-xl">
         <div class="card">
             <div class="card-body">
-                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap ">
                     <thead>
                         <tr>
                             <th style="width:5%;" class="text-center">S. No.</th>
-                            <th style="width:15%;" class="text-center">Title</th>
-                            <th style="width:15%;" class="text-center">Subtitle</th>
-                            <th style="width:15%;" class="text-center">Slug</th>
-                            <th style="width:8%;" class="text-center">View Tour</th>
-                            <th style="width:12%;" class="text-center">Banner</th>
+                            <th style="width:8%;" class="text-center">Tour <br>Code</th>
+                            <th style="width:8%;" class="text-center">Title</th>
+                            <th style="width:8%;" class="text-center">Slug</th>
+                            <th style="width:8%;" class="text-center">Duration</th>
+                            <th style="width:8%;" class="text-center">Start <br>Location</th>
+                            <th style="width:8%;" class="text-center">Group Size</th>
+                            <th style="width:8%;" class="text-center">Price</th>
+                            <th style="width:8%;" class="text-center">Add to <br>hot deals</th>
+                            <th style="width:8%;" class="text-center">Draft /<br>Publish </th>
                             <th style="width:8%;" class="text-center">Status</th>
-                            <th style="width:12%;" class="text-center">Action</th>
+                            <th style="width:8%;" class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,18 +50,33 @@
                             @foreach($tours as $tour)
                                 <tr>
                                     <td class="text-center">{{ $loop->index + 1}}</td>
-                                    <td class="text-center">{!!$tour->tour_title!!}</td>
-                                    <td class="text-center">{!!$tour->tour_subtitle!!}</td>
-                                    <td class="text-center">{!!$tour->tour_slug!!}</td>
+                                    <td class="text-center">{{ $tour->tour_code }}</td>
+                                    <td class="text-center">{{ $tour->tour_title }}</td>
+                                    <td class="text-center">{{ $tour->tour_slug }}</td>
+                                    <td class="text-center">{{ $tour->tour_duration_day }} Days <br>{{ $tour->tour_duration_night }} Nights</td>
+                                    <td class="text-center">{{ $tour->tour_start_location }}</td>
+                                    <td class="text-center">{{ $tour->tour_group_size_adult }} Adults <br>{{ $tour->tour_group_size_child }} Child</td>
+                                    <td class="text-center">{{ $tour->tour_price_per_adult }} per adult <br>{{ $tour->tour_price_per_child }} per child </td>
                                     <td class="text-center">
-                                        <a href="{{route($tour->tour_slug)}}" target="_new">
-                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-eye-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M11.102 17.957c-3.204 -.307 -5.904 -2.294 -8.102 -5.957c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6a19.5 19.5 0 0 1 -.663 1.032" /><path d="M15 19l2 2l4 -4" /></svg>
-                                        </a>
+                                        @if($tour->tour_add_to_hot_deals == 1)
+                                            YES
+                                        @else 
+                                            NO
+                                        @endif
                                     </td>
-                                    <td class="text-center"><img src="{{ asset('storage/' . $tour->tour_banner) }}" style="height:40px;width:auto;"></td>
-                                    <td class="text-center">{!!$tour->tour_template!!}</td>
-                                    <td class="text-center">@if($tour->status == 1) Active @else Inactive @endif</td>
-
+                                    <td class="text-center">
+                                        @if($tour->is_publish == 1)
+                                            PUBLISHED
+                                        @else 
+                                            IN DRAFT
+                                        @endif</td>
+                                    <td class="text-center">
+                                        @if($tour->status == 1) 
+                                            Active 
+                                        @else 
+                                            Inactive 
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         <a type="button" class="btn" href="{{ route('tour.edit', ['tour_id' => $tour->tour_id]) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path><path d="M16 5l3 3"></path></svg>

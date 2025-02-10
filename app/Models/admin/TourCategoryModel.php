@@ -41,7 +41,7 @@ class TourCategoryModel extends Model
 
     public static function getChildrenByTourCategoryId($tour_category_id)
     {
-        return TourCategoryModel::where(['status'=> 1, 'tour_parent_category_id' => $tour_parent_category_id])->get();
+        return TourCategoryModel::where(['status'=> 1, 'tour_parent_category_id' => $tour_category_id])->get();
     }
 
     public static function getChildTourCategory($tour_parent_category_id)

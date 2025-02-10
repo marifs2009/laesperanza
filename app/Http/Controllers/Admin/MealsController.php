@@ -61,4 +61,54 @@ class MealsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function update(Request $request){
+      try{
+        $meal_type_id=$request->meal_type_id;
+        $request->validate([
+          'meal_type_name'=>'required|string|max:255',
+          'meal_type_description'=>'required',
+        ]);
+        $dataAry=[
+          'meal_type_name'=>$request->meal_type_name,
+          'meal_type_description'=>$request->meal_type_description,
+          'status'=>1,
+          'updated_at'=>now(),
+        ];
+        $update=MealsModel::where('meal_type_id',$meal_type_id)->update($dataAry);
+        if($update)
+        {
+          return back()->with('mael_update_success','meal updated successfully');
+        }
+        else{
+          return back()->with('meal_update_error','unable to meal update');
+        }
+      }
+      catch(\Exception $e)
+      {
+        return back()->with('meal_update_error',$e->getMessage());
+      }
+
+    }
+
+
+
+     public function delete(Request $request){
+      try{
+        $meal_type_id=$request->meal_type_id;
+        $dataAry=[
+          'status'=>2,
+          'updated_at'=>date("Y-m-d")
+        ];
+        $soft_delete=MealsModel::where('meal_type_id',$meal_type_id)->update($dataAry);
+        if($soft_delete){
+          return back()->with('meal_delete_success','meal deleted successfully');
+        }
+        else{
+          return back()->with('meal_delete_error','unable to delete meal');
+        }
+      }
+      catch(\Exception $e){
+        return back()->with('meal_delete_error',$e->getMessage());
+      }
+     }
 }

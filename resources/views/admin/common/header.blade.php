@@ -47,7 +47,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{route('users.list')}}" >
+                  <a class="nav-link" href="{{route('user.list')}}" >
                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                       <svg  xmlns="http://www.w3.org/2000/svg" class="icon"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users-group"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" /><path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M17 10h2a2 2 0 0 1 2 2v1" /><path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M3 13v-1a2 2 0 0 1 2 -2h2" /></svg>
                     </span>  
@@ -56,16 +56,44 @@
                     </span>
                   </a>
                 </li>
-               <li class="nav-item">
-                  <a class="nav-link" href="{{route('page.list')}}" >
+                <!-- <li class="nav-item">
+                  <a class="nav-link" href="{route('leads')}}" >
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      <svg  xmlns="http://www.w3.org/2000/svg" class="icon"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v7" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M11 4h2" /><path d="M12 17v.01" /></svg>
+                    </span>  
+                    <span class="nav-link-title">
+                      Leads
+                    </span>
+                  </a>
+                </li> -->
+                <!-- <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle show" href="#navbar-help" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="true">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-invoice"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 7l1 0" /><path d="M9 13l6 0" /><path d="M13 17l2 0" /></svg>
+                    </span>
+                    <span class="nav-link-title">
+                      Sales
+                    </span>
+                  </a>
+                  <div class="dropdown-menu" data-bs-popper="static">
+                    <a class="dropdown-item" href="{route('sale-status')}}">Sale Status</a>
+                    <a class="dropdown-item" href="{route('follow-up')}}">Follow-up</a>
+                    <a class="dropdown-item" href="{route('upgrade')}}">Upgrade</a>
+                    <a class="dropdown-item" href="{route('docusign')}}">Docusign</a>
+                    <a class="dropdown-item" href="{route('invoice')}}">Invoice</a>
+                    <a class="dropdown-item" href="{route('feedbacks')}}">Feedbacks</a>
+                  </div>
+                </li> -->
+                <!-- <li class="nav-item">
+                  <a class="nav-link" href="{route('reports')}}" >
                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-report"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M17 13v4h4" /><path d="M12 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-6.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v2m0 3v4" /></svg>
                     </span>
                     <span class="nav-link-title">
-                      Pages
+                      Reports
                     </span>
                   </a>
-                </li>
+                </li> -->
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#navbar-sliders" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
                     <span class="nav-link-icon d-md-none d-lg-inline-block">

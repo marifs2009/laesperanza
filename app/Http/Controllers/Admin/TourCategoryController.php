@@ -6,6 +6,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+
 
 use App\Models\Admin\RolesModel;
 use App\Models\Admin\MealsModel;
@@ -21,6 +24,7 @@ use App\Models\Admin\OffersModel;
 use App\Models\Admin\GeneralSettingsModel;
 use App\Models\Admin\TourTypesModel;
 use App\Models\Admin\PageCategoryModel;
+use App\Models\Admin\PagesModel;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
 
@@ -281,17 +285,60 @@ class TourCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      */
     public function delete(Request $request)
-    {
-      try {
-        //echo $request->tour_category_id; die;
-        if(TourCategoryModel::where('tour_category_id', $request->tour_category_id)->delete()){
-          return response()->json(['msg' => 'page deleted successfully.', 'status' => 1]);
-        } else {
-          return response()->json(['msg' => 'Unable to delete page.', 'status' => 0]);
-        }
-      } catch (\Exception $e) {
-        return response()->json(['msg' => $e->getMessage(), 'status' => 0]);
-      }
-    }
+{
+    // \Log::info('Delete Request:', $request->all());
 
+    try {
+        $tour_category_id = $request->tour_category_id;
+
+        if (!$tour_category_id) {
+            return back()->with('error', 'Invalid tour category ID');
+        }
+
+        $dataAry = [
+            'status' => 2,
+            'updated_at' => now("y-m-d"), 
+        ];
+
+        $soft_delete = TourCategoryModel::where('tour_category_id', $tour_category_id)->update($dataAry);
+        if ($soft_delete) {
+            return back()->with('tour_delete_success', 'Tour category deleted successfully!');
+        } else {
+            return back()->with('tour_delete_error', 'Unable to delete tour category');
+        }
+    } catch (\Exception $e) {
+        // \log::error('Delete Error:', ['message' => $e->getMessage()]);
+        return back()->with('tour_delete_error', $e->getMessage());
+    }
+}
+
+    
+
+
+
+
+    // public function delete(Request $request)
+    // {
+    //     Log::info('Delete request received:', $request->all());
+    
+    //     $tour_category_id = $request->tour_category_id;
+    
+    //     if (!$tour_category_id) {
+    //         return back()->with('error', 'Invalid tour ID');
+    //     }
+    
+    //     try {
+    //         $deleted = TourCategoryModel::where('tour_category_id', $tour_category_id)->delete();
+    
+    //         if ($deleted) {
+    //             return back()->with('success', 'Tour deleted successfully');
+    //         } else {
+    //             return back()->with('error', 'Unable to delete tour');
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('Delete error:', ['message' => $e->getMessage()]);
+    //         return back()->with('error', $e->getMessage());
+    //     }
+    // }
+    
 }

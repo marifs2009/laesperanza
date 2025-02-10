@@ -58,6 +58,52 @@ class RolesController extends Controller
      * Store a newly created resource in storage.
      *
      * @return \Illuminate\Http\Response
+     * 
      */
+    public function update(Request $request)
+    {
+      try{
+        $roles_id=$request->id;
+        $request->validate([
+          'role' => 'required|string|max:255', // Ensure the role name is required and within the max length
+        ]);
+        $dataAry=[
+          'name'=> $request->role,
+          'status'=>1,
+          'updated_at'=>now(),
+        ];
+        $update=RolesModel::where('id',$roles_id)->update($dataAry);
+        if($update){
+          return back()->with('role_update_success','roles updated successfully');
+        }
+        else{
+          return back()->with('role_update_error','unable to delete roles');
+        }
+      }
+      catch(\Exception $e){
+        return back()->with('role_update_error',$e->getMessage());
+      }
+      }
+ 
+    public function delete(Request $request)
+    {
+      try{
+        $roles_id=$request->id;
 
+        $dataAry=[
+          'status'=>2,
+          'updated_at'=>date("Y-m-d")
+        ];
+        $soft_delete=RolesModel::where('id',$roles_id)->update($dataAry);
+        if($soft_delete){
+          return back()->with('roles_delete_success','roles deleted successfully');
+        }
+        else{
+          return back()->with('roles_delete_error','unable to delete roles');
+        }
+      }
+      catch(\Exception $e){
+        return back()->with('roles_delete_error',$e->getMessage());
+      }
+    }
 }

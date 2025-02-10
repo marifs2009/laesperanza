@@ -155,25 +155,121 @@ class HotelsController extends Controller
       }
     }
 
+
+
+    public function update(Request $request)
+    {
+      //echo "<pre>";print_r($_FILES);echo "</pre>"; die;
+      try{
+        $hotel_id=$request->hotel_id;
+        if ($request->hasFile('hotel_picture')) {
+        
+        $request->validate([
+          'hotel_name' => 'required',
+          'hotel_location' => 'required',
+          'hotel_type' => 'required',
+          'hotel_description' => 'required',
+          'hotel_picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate image
+          'old_hotel_picture' => 'required', // Validate image
+
+        ]);
+      }
+      else{
+        $request->validate([
+          'hotel_name' => 'required',
+          'hotel_location' => 'required',
+          'hotel_type' => 'required',
+          'hotel_description' => 'required',
+          'old_hotel_picture' => 'required', // Validate image
+        ]);
+      }
+        $hotel_pic_path = $request->old_hotel_picture;
+        if ($request->hasFile('hotel_picture')) {
+          $file = $request->file('hotel_picture');
+          $originalFileName = $file->getClientOriginalName();
+          $cleanFileName = preg_replace('/[^A-Za-z0-9\-]/', '-', pathinfo($originalFileName, PATHINFO_FILENAME));
+          $cleanFileNameWithExtension = $cleanFileName . '.' . $file->getClientOriginalExtension();
+          $hotel_pic_path = $file->storeAs('img', $cleanFileNameWithExtension, 'public');
+        }
+
+        $dataAry = [
+          'hotel_name' => $request->hotel_name, 
+          'hotel_picture' => $hotel_pic_path, 
+          'hotel_location' => $request->hotel_location, 
+          'hotel_type' => $request->hotel_type, 
+          'hotel_description' => $request->hotel_description, 
+          'status' => $request->status, 
+          'updated_at' => date("d-m-Y"), 
+        ];
+        //echo "<pre>";print_r($dataAry);echo "</pre>"; die;
+        if(HotelsModel::where('hotel_id',$hotel_id)->update($dataAry)){
+          return back()->with('hotel_update_success', 'Hotel updated successfully!');
+        } else {
+          return back()->with('hotel_update_error', 'Unable to Updated new hotel');
+        }
+      } catch (\Exception $e) {
+        // Failure message
+        return back()->with('hotel_update_error', $e->getMessage());
+      }
+    }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      */
+    // public function delete(Request $request)
+    // {
+    //   try {
+    //     //echo $request->hotel_id; die;
+    //     if(HotelsModel::where('hotel_id', $request->hotel_id)->delete()){
+    //       return response()->json(['msg' => 'Hotel deleted successfully.', 'status' => 1]);
+    //     } else {
+    //       return response()->json(['msg' => 'Unable to delete hotel.', 'status' => 0]);
+    //     }
+    //   } catch (\Exception $e) {
+    //     return response()->json(['msg' => $e->getMessage(), 'status' => 0]);
+    //   }
+    // }
+
+    //////////////
     public function delete(Request $request)
     {
-      try {
-        //echo $request->hotel_id; die;
-        if(HotelsModel::where('hotel_id', $request->hotel_id)->delete()){
-          return response()->json(['msg' => 'Hotel deleted successfully.', 'status' => 1]);
+      //echo "<pre>";print_r($_FILES);echo "</pre>"; die;
+      try{
+        $hotel_id=$request->hotel_id;
+        
+
+        $dataAry = [ 
+          'status' => 2, 
+          'updated_at' => date("y-m-d"), 
+        ];
+        //echo "<pre>";print_r($dataAry);echo "</pre>"; die;
+        if(HotelsModel::where('hotel_id',$hotel_id)->update($dataAry)){
+          return back()->with('hotel_delete_success', 'Hotel deleted successfully!');
         } else {
-          return response()->json(['msg' => 'Unable to delete hotel.', 'status' => 0]);
+          return back()->with('hotel_delete_error', 'Unable to deleted new hotel');
         }
       } catch (\Exception $e) {
-        return response()->json(['msg' => $e->getMessage(), 'status' => 0]);
+        // Failure message
+        return back()->with('hotel_delete_error', $e->getMessage());
       }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
            
 }

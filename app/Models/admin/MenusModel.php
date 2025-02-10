@@ -41,6 +41,13 @@ class MenusModel extends Model
         ->where(['menus.status' => 1, 'menus.menu_type_id' => $menu_type_id, 'menus.parent_menu_id' => 0])->orderBy('menu_order', 'asc')
         ->get();
     }  
+    public static function getMenuById($menu_id)
+    {
+        return MenusModel::select('menus.*', 'master_menu_types.menu_type_name as menu_type_name')
+        ->leftJoin('master_menu_types', 'menus.menu_type_id', '=', 'master_menu_types.menu_type_id')
+        ->where(['menus.status' => 1, 'menus.menu_id' => $menu_id, 'menus.parent_menu_id' => 0])->orderBy('menu_order', 'asc')
+        ->first();
+    }
 
 
 }

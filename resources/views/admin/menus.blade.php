@@ -80,13 +80,24 @@
                               <span class="badge bg-red-lt">Inactive</span>
                             @endif
                           </td>
-                          <td> {{$sel_menu->menu_type_id}}
-                            <a type="button" class="btn" href="{{ route('menu.edit', ['menu_id' => $sel_menu->menu_id]) }}">
+                          <td> 
+                            @php
+                                   $encrypt_menu_id=Crypt::encrypt($sel_menu->menu_id);
+                              @endphp
+                            <a type="button" class="btn" href="{{ route('menu.edit', ['encrypt_menu_id' => $encrypt_menu_id,'menu_type_id'=>$menu_type_id]) }}">
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path><path d="M16 5l3 3"></path></svg>
                             </a>
-                            <button type="button" class="btn" onclick="menu_delete({{$sel_menu->menu_id}});">
+
+
+                          <form method="post" id="form_menu_delete" action="{{route('menu.delete')}}">
+                              @csrf
+                              <input type="hidden" name="menu_type_id" value="{{ $menu_type_id}}">
+                            <button type="submit" class="btn" >
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
                             </button>
+                          </form>
+
+:
                           </td>
                         </tr>
                         @endforeach
@@ -103,13 +114,27 @@
                       <strong>Success!</strong> {{ session('menu_add_success') }}
                     </div>
                   @endif
-
                   <!-- Display Error Message -->
                   @if(session('menu_add_error'))
                     <div class="alert alert-danger">
                       <strong>Error!</strong> {{ session('menu_add_error') }}
                     </div>
                   @endif
+                  <!-- Display delete Message -->
+
+                  @if(session('menu_delete_success'))
+                  <div class="alert alert-success">
+                    <strong>Success!</strong> {{ session('menu_delete_success') }}
+                  </div>
+                @endif
+                <!-- Display Error Message -->
+                @if(session('menu_delete_error'))
+                  <div class="alert alert-danger">
+                    <strong>Error!</strong> {{ session('menu_delete_error') }}
+                  </div>
+                @endif
+
+
                   <form method="post" id="form_menu_save" action="{{route('menus.store')}}">
                     @csrf
                     <h4 class="page-title mb-3 font-size-18">Add New Menu</h4>

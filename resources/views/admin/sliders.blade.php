@@ -40,18 +40,18 @@
         <div class="alert alert-danger"><strong>Error!</strong> {{session('slider_add_error')}}</div>
       @endif
       
-      @if(session('slider_deleted_success'))
-        <div class="alert alert-success"><strong>Success!</strong> {{session('slider_deleted_success')}}</div>
+      @if(session('slider_delete_success'))
+        <div class="alert alert-success"><strong>Success!</strong> {{session('slider_delete_success')}}</div>
       @endif
-      @if(session('slider_deleted_error'))
-        <div class="alert alert-danger"><strong>Error!</strong> {{session('slider_deleted_error')}}</div>
+      @if(session('slider_delete_error'))
+        <div class="alert alert-danger"><strong>Error!</strong> {{session('slider_delete_error')}}</div>
       @endif   
       
-      @if(session('slider_edit_success'))
-        <div class="alert alert-success"><strong>Success!</strong> {{session('slider_edit_success')}}</div>
+      @if(session('slider_update_success'))
+        <div class="alert alert-success"><strong>Success!</strong> {{session('slider_update_success')}}</div>
       @endif
       @if(session('slider_edit_error'))
-        <div class="alert alert-danger"><strong>Error!</strong> {{session('slider_edit_error')}}</div>
+        <div class="alert alert-danger"><strong>Error!</strong> {{session('slider_updtae_error')}}</div>
       @endif    
 
 
@@ -171,9 +171,13 @@
                     </div>
                   </div>
                 </div>
-                <button type="button" class="btn" onclick="slider_delete({{$sel_slider->slider_id}});">
+                <form method="post" enctype="multipart/form-data" id="form-slider-delete-{{$sel_slider->slider_id}}" action="{{route('slider.delete')}}">
+                  @csrf
+                  <input type="hidden" name="slider_id" value="{{$sel_slider->slider_id }}">
+                  <button type="submit" class="btn">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
                 </button>
+              </form>
               </td>
             </tr>
             @endforeach

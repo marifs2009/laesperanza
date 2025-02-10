@@ -63,4 +63,54 @@ class TourTypesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function update(Request $request){
+      try{
+        $tour_type_id=$request->tour_type_id;
+        $request->validate([
+          'tour_type_name'=>'required|string|max:255',
+          'tour_type_description'=>'required',
+        ]);
+        $dataAry=[
+          'tour_type_name'=>$request->tour_type_name,
+          'tour_type_description'=>$request->tour_type_description,
+          'status'=>1,
+          'updated_at'=>now(),
+        ];
+        $tour=TourTypesModel::where('tour_type_id',$tour_type_id)->update($dataAry);
+        if($tour){
+          return back()->with('tourType_update_success','tour update successfully');
+        }
+        else{
+          return back()->with('tourType_update_error','tour type updated error');
+        } 
+      }
+      catch(\Exception $e){
+        return back()->with('tour_type_update_error',$e->getMessage());
+      }
+    }
+
+
+
+     public function delete(Request $request)
+     {
+      try{
+        $tour_type_id=$request->tour_type_id;
+        $dataAry=[
+          'status'=>2,
+          'updated_at'=>date("Y-m-d")
+        ];
+        $soft_delete=TourTypesModel::where('tour_type_id',$tour_type_id)->update($dataAry);
+        if($soft_delete)
+        {
+          return back()->with('tourTypes_delete_success','tour type deleted successfully');
+        }
+        else{
+          return back()->with('tourTypes_delete_error','unable to delete successfully');
+        }
+      }
+      catch(\Exception $e){
+        return back()->with('tourTypes_delete_error',$e->getMessage());
+      }
+     }
 }
