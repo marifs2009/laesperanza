@@ -55,7 +55,7 @@
                     </thead>
                     <tbody>
                       @if(!empty($selected_menu))
-                        @foreach($selected_menu as $sel_menu)
+                        @foreach($selected_menu as $sel_menu) 
                         <tr>
                           <td>{{$sel_menu->menu_order}}</td>
                           <td>{{$sel_menu->menu_label}}</td>
@@ -67,11 +67,11 @@
                             @else
                               {{$sel_menu->menu_link}}
                             @endif
-                          <td>{{ $sel_menu->menu_parent_id }} 
-                            @if($sel_menu->menu_parent_id == 0) 
+                          <td>
+                            @if($sel_menu->parent_menu_id == 0) 
                               No Parent 
                             @else 
-                              {{ $sel_menu->menu_parent_id }} 
+                              {{ $sel_menu->parent_menu_id }} 
                             @endif</td>
                           <td class="text-center">
                             @if($sel_menu->status == 1)

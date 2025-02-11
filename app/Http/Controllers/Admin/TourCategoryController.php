@@ -115,10 +115,6 @@ class TourCategoryController extends Controller
       }
       $data['tree'] = $str;
       $data['tour_categories'] = TourCategoryModel::getAll();
-
-
-
-
       //echo "<pre>";print_r($data['tour_categories']);echo "</pre>";die;
       return view('admin/tour_category_list', $data);
     }
